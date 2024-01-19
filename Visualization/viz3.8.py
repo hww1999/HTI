@@ -1,14 +1,10 @@
 from dash import Dash, dcc, html, dash_table, Input, Output, State, callback
-import base64, csv
+import base64, csv, io, os, json, dash
 from io import StringIO
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.express as px
 import pandas as pd
-import os, json
-
-
-
 
 app = Dash(__name__)
 
@@ -43,16 +39,6 @@ app.layout = html.Div([
             ),
         ], style={'width': '48%', 'display': 'inline-block'}),
 
-        # html.Div([
-        #     dcc.Dropdown(
-        #         results,
-        #         '',
-        #         id='yaxis-column'
-        #     ),
-        # ], style={'width': '48%', 'float': 'right', 'display': 'inline-block'}),
-
-        # data has to be converted to a string like JSON or base64 encoded binary data for storage
-        # dcc.Store(id='ori_df'),
         dcc.Store(id='df'),
         dcc.Store(id='df-columns'),
 
@@ -61,12 +47,14 @@ app.layout = html.Div([
 
         html.Div([
             dcc.Dropdown(
+                placeholder='choose x-axis',
                 id='x-axis'
             ),
         ], style={'width': '48%', 'float': 'right', 'display': 'inline-block'}),
 
         html.Div([
             dcc.Dropdown(
+                placeholder='choose y_axis',
                 id='y-axis'
             ),
         ], style={'width': '48%', 'float': 'right', 'display': 'inline-block'}),
@@ -80,11 +68,18 @@ app.layout = html.Div([
 ])
 
 def parse_contents(contents, filename):#, date):
-    content_type, content_string = contents.split(',')
-
-    dfs = {}
+    # print(contents)
+    if [contents, filename] == [None, None]:
+        return dash.no_update
+    _, content_string = contents.split(',')
     decoded = base64.b64decode(content_string)
-    df = pd.read_csv(StringIO(decoded.decode('utf-8')))
+    
+    if 'csv' in filename:
+        df = pd.read_csv(StringIO(decoded.decode('utf-8')))
+    elif 'pkl' in filename:
+        df = pd.read_pickle(io.BytesIO(decoded))
+    elif 'json' in filename:
+        df = pd.read_json(io.BytesIO(decoded))
     return df#.to_json(orient='split', date_format='iso')
 
 @callback(
@@ -120,7 +115,6 @@ def choose_data(xaxis_column_name, dfs):#yaxis_column_name):
     chosen = xaxis_column_name[1:-1]
      # data has to be converted to a string like JSON or base64 encoded binary data for storage
     df = pd.read_json(dfs[chosen], orient='split')#[results.index(yaxis_column_name)]
-    print(type(df))
     df_1 = df[df['Metadata_Plate'] == 'Plate 1']
     df_2 = df[df['Metadata_Plate'] == 'Plate 2']
     df_3 = df[df['Metadata_Plate'] == 'Plate 3']
@@ -187,110 +181,6 @@ def update_graph1(x_axis_name, y_axis_name, df):
     # fig = px.scatter(dff, x=x_axis_name[1:-1], y=y_axis_name[1:-1])
     return fig1, fig2, fig3
 
-# @callback(
-#     Output('graph2', 'figure'), 
-#     Input('x-axis', 'value'), 
-#     Input('y-axis', 'value'), 
-#     Input('df', 'data')
-#     )
-# def update_graph2(x_axis_name, y_axis_name, df):
-#     datasets = json.loads(df)
-#     dff = pd.read_json(datasets['df_2'], orient='split')
-#     # df = pd.read_json(df, orient='split')
-#     fig = px.scatter(dff, x=x_axis_name[1:-1], y=y_axis_name[1:-1])
-#     return fig
-
-# @callback(
-#     Output('graph3', 'figure'), 
-#     Input('x-axis', 'value'), 
-#     Input('y-axis', 'value'), 
-#     Input('df', 'data')
-#     )
-# def update_graph3(x_axis_name, y_axis_name, df):
-#     datasets = json.loads(df)
-#     dff = pd.read_json(datasets['df_3'], orient='split')
-#     # df = pd.read_json(df, orient='split')
-#     fig = px.scatter(dff, x=x_axis_name[1:-1], y=y_axis_name[1:-1])
-#     return fig
-
-# how to pre-clean data
-# @callback(
-#     Output('intermediate-value', 'data'),
-#     Input('dropdown', 'value'))
-# def clean_data(value):
-#      cleaned_df = slow_processing_step(value)
-
-#      # a few filter steps that compute the data
-#      # as it's needed in the future callbacks
-#      df_1 = cleaned_df[cleaned_df['fruit'] == 'apples']
-#      df_2 = cleaned_df[cleaned_df['fruit'] == 'oranges']
-#      df_3 = cleaned_df[cleaned_df['fruit'] == 'figs']
-
-#      datasets = {
-#          'df_1': df_1.to_json(orient='split', date_format='iso'),
-#          'df_2': df_2.to_json(orient='split', date_format='iso'),
-#          'df_3': df_3.to_json(orient='split', date_format='iso'),
-#      }
-
-#      return json.dumps(datasets)
-
-# @callback(
-#     Output('graph1', 'figure'),
-#     Input('intermediate-value', 'data'))
-# def update_graph_1(jsonified_cleaned_data):
-#     datasets = json.loads(jsonified_cleaned_data)
-#     dff = pd.read_json(datasets['df_1'], orient='split')
-#     figure = create_figure_1(dff)
-#     return figure
-
-# @callback(
-#     Output('graph2', 'figure'),
-#     Input('intermediate-value', 'data'))
-# def update_graph_2(jsonified_cleaned_data):
-#     datasets = json.loads(jsonified_cleaned_data)
-#     dff = pd.read_json(datasets['df_2'], orient='split')
-#     figure = create_figure_2(dff)
-#     return figure
-
-# @callback(
-#     Output('graph3', 'figure'),
-#     Input('intermediate-value', 'data'))
-# def update_graph_3(jsonified_cleaned_data):
-#     datasets = json.loads(jsonified_cleaned_data)
-#     dff = pd.read_json(datasets['df_3'], orient='split')
-#     figure = create_figure_3(dff)
-#     return figure
-
-# ########################################################################
-# import dash_core_components as dcc
-# import plotly.express as px
-# import plotly.subplots as sp
-
-
-# # Create figures in Express
-# figure1 = px.line(my_df)
-# figure2 = px.bar(my_df)
-
-# # For as many traces that exist per Express figure, get the traces from each plot and store them in an array.
-# # This is essentially breaking down the Express fig into it's traces
-# figure1_traces = []
-# figure2_traces = []
-# for trace in range(len(figure1["data"])):
-#     figure1_traces.append(figure1["data"][trace])
-# for trace in range(len(figure2["data"])):
-#     figure2_traces.append(figure2["data"][trace])
-
-# #Create a 1x2 subplot
-# this_figure = sp.make_subplots(rows=1, cols=2) 
-
-# # Get the Express fig broken down as traces and add the traces to the proper plot within in the subplot
-# for traces in figure1_traces:
-#     this_figure.append_trace(traces, row=1, col=1)
-# for traces in figure2_traces:
-#     this_figure.append_trace(traces, row=1, col=2)
-
-# #the subplot as shown in the above image
-# final_graph = dcc.Graph(figure=this_figure)
 
 if __name__ == '__main__':
     app.run(debug=True)
