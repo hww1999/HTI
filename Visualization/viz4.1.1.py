@@ -134,25 +134,21 @@ def update_graph1(x_axis_name, y_axis_name, dfs):
                         shared_yaxes=True, x_title='Dosage Level (log)',
                         y_title=y)
     i = 1
-    # l = 100
-    # h = 0
     for k, v in zip(dfs.keys(), dfs.values()):
         df = pd.read_json(v, orient='split')
         df = df[df['Metadata_Metadata_Cytokine']==x_axis_name[1:-1]]
 
-
-        fig.add_scatter(x=np.log(df['Metadata_Metadata_Dose']), y=df[y], 
-                        mode="markers", marker=dict(size=5, color="LightSeaGreen"), 
-                        row=1, col=i)
-        # h = max(h, max(df[y_axis_name[1:-1]]))
-        # l = min(l, min(df[y_axis_name[1:-1]]))
+        try:
+            fig.add_scatter(x=np.log(df['Metadata_Metadata_Dose']), y=df[y], 
+                            mode="markers", marker=dict(size=5, color="LightSeaGreen"), 
+                            row=1, col=i)
+        except:
+            pass
         
         i += 1
     fig.update_layout(
         autosize=True,
         height = 500,
-        # xaxis_title="Dosage Level (log)",
-        # yaxis_title=y_axis_name[1:-1],
         margin=dict(
             l=20,
             r=20,
