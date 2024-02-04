@@ -1,3 +1,4 @@
+# Common library packages
 import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt
@@ -10,8 +11,9 @@ import io
 from io import StringIO
 import json
 
-def parse_contents(contents, filename):#, date):
-    # print(contents)
+# Custom Functions
+
+def parse_contents(contents, filename):
     _, content_string = contents.split(',')
     decoded = base64.b64decode(content_string)
     
@@ -23,91 +25,78 @@ def parse_contents(contents, filename):#, date):
         df = pd.read_json(io.BytesIO(decoded))
     return df
 
+# Function for drawing heatmap 
+def heatmap_generator(df, name_of_cytokine_column = 'Metadata_Metadata_Cytokine', cytokine_of_interest = 'EGF', 
+                      columns_of_interest_for_heatmap = 'Granularity'):
+    
+    '''
+    This function helps generate heatmaps and calculate correlation matrix for the dataframe provided to it. 
+    
+    Arguments:
 
-##Function for drawing heatmap 
-# def heatmap_generator( name_of_cytokine_column = 'Metadata_Metadata_Cytokine', cytokine_of_interest = 'EGF', 
-#                       columns_of_interest_for_heatmap = 'Granularity', df):
+    - dataframe: the dataframe which is going to be used for finding correlation
+    - name_of_cytokine_column: the name of the column which has different cytokine types
+    - cytokine_of_interest: the name of the cytokine we are interested to filter the data and evaluate effect on 
+    different features 
+    - columns_of_interest_for_heatmap: the main attribute we are interested in e.g. Granularity, Intensity etc
     
-#     '''
-#     This function helps generate heatmaps and calculate correlation matrix for the dataframe provided to it. 
+    Output: 
     
-#     Arguments:
+    - Prints heatmap of the selected features and type of cytokine 
+    
+    Returns: 
+    
+    - Correlation Matrix 
+    '''
+    
+    filtered_dataframe = df[df[name_of_cytokine_column] == 
+                                   cytokine_of_interest].drop(['Metadata_Well'], axis = 1)
+    
+    # Select columns starting with "columns_of_interest_for_heatmap"
+    selected_columns = df.filter(regex=f'^{columns_of_interest_for_heatmap}_', axis=1).columns.tolist()
+    
+    # Append dose to selected columns 
+    selected_columns.append('Metadata_Metadata_Dose')
+    
+    # Calculate the correlation matrix
+    corr_matrix = filtered_dataframe[selected_columns].corr()
 
-#     - dataframe: the dataframe which is going to be used for finding correlation
-#     - name_of_cytokine_column: the name of the column which has different cytokine types
-#     - cytokine_of_interest: the name of the cytokine we are interested to filter the data and evaluate effect on 
-#     different features 
-#     - columns_of_interest_for_heatmap: the main attribute we are interested in e.g. Granularity, Intensity etc
-    
-#     Output: 
-    
-#     - Prints heatmap of the selected features and type of cytokine 
-    
-#     Returns: 
-    
-#     - Correlation Matrix 
-#     '''
-    
-    
-#     filtered_dataframe = df[df[name_of_cytokine_column] == 
-#                                    cytokine_of_interest].drop(['Metadata_Well'], axis = 1)
-    
-#     # Select columns starting with "columns_of_interest_for_heatmap"
-#     selected_columns = df_perinuclear.filter(regex=f'^{columns_of_interest_for_heatmap}_', axis=1).columns.tolist()
-    
-#     # Append dose to selected columns 
-#     selected_columns.append('Metadata_Metadata_Dose')
-    
-#     # Calculate the correlation matrix
-#     corr_matrix = filtered_dataframe[selected_columns].corr()
+    # Create an interactive heatmap with hover text
+    fig = px.imshow(corr_matrix,
+                x=corr_matrix.columns,
+                y=corr_matrix.columns,
+                labels=dict(color='Correlation'),
+                color_continuous_scale='RdBu',
+                title=f"Correlation Matrix Heatmap for the Cytokine: {cytokine_of_interest}",
+                width=1000, height=1000)
 
-#     # Create a heatmap of the correlation matrix
-#     #plt.figure(figsize=(10, 8))
-#     #sns.heatmap(corr_matrix, annot=False, cmap='coolwarm', fmt=".2f", linewidths=.5)
-#     #plt.title(f"Correlation Matrix Heatmap for the Cytokine: {cytokine_of_interest}")
-#     #plt.show()
+    # Add hover information
+    fig.update_traces(hovertemplate='Correlation: %{z:.2f}')
+
+        # Add separation lines between points
+    for i in range(len(corr_matrix.columns) - 1):
+        fig.add_shape(
+            type='line',
+            x0=i + 0.5,
+            x1=i + 0.5,
+            y0=-0.5,
+            y1=len(corr_matrix.columns) - 0.5,
+            line=dict(color='black', width=1)
+        )
+
+        fig.add_shape(
+            type='line',
+            x0=-0.5,
+            x1=len(corr_matrix.columns) - 0.5,
+            y0=i + 0.5,
+            y1=i + 0.5,
+            line=dict(color='black', width=1)
+        )
     
-
-#     # Create an interactive heatmap with hover text
-#     fig = px.imshow(corr_matrix,
-#                 x=corr_matrix.columns,
-#                 y=corr_matrix.columns,
-#                 labels=dict(color='Correlation'),
-#                 color_continuous_scale='RdBu',
-#                 title=f"Correlation Matrix Heatmap for the Cytokine: {cytokine_of_interest}",
-#                 width=1000, height=1000)
-
-#     # Add hover information
-#     fig.update_traces(hovertemplate='Correlation: %{z:.2f}')
-
-#     # Show the interactive heatmap
-#     #fig.show()
-
-#         # Add separation lines between points
-#     for i in range(len(corr_matrix.columns) - 1):
-#         fig.add_shape(
-#             type='line',
-#             x0=i + 0.5,
-#             x1=i + 0.5,
-#             y0=-0.5,
-#             y1=len(corr_matrix.columns) - 0.5,
-#             line=dict(color='black', width=1)
-#         )
-
-#         fig.add_shape(
-#             type='line',
-#             x0=-0.5,
-#             x1=len(corr_matrix.columns) - 0.5,
-#             y0=i + 0.5,
-#             y1=i + 0.5,
-#             line=dict(color='black', width=1)
-#         )
-    
-#     return fig
+    return fig
 
 
 # Define layout
-
 app = Dash(__name__)
 app.layout = html.Div(
     children=[
@@ -142,7 +131,7 @@ app.layout = html.Div(
         dcc.Dropdown(
             id='name_of_cytokine_column_dropdown',
             #options=[{'label': 'Metadata_Metadata_Cytokine', 'value': 'Metadata_Metadata_Cytokine'}],
-            value='Metadata_Metadata_Cytokine',
+            # value='Metadata_Metadata_Cytokine',
             disabled=False  # Only one option, so disable the dropdown
         ),
 
@@ -151,7 +140,7 @@ app.layout = html.Div(
         dcc.Dropdown(
             id='cytokine_of_interest_dropdown',
             # options=[{'label': cytokine, 'value': cytokine} for cytokine in mean_df['Metadata_Metadata_Cytokine'].unique()],
-            value='EGF'
+            # value='EGF'
         ),
 
         # Widget for columns_of_interest_for_heatmap
@@ -166,11 +155,13 @@ app.layout = html.Div(
                 {'label': 'Texture_Contrast', 'value': 'Texture_Contrast'}
             ],
             multi=False,
-            value='Granularity'  # Default selected value
+            # value='Granularity'  # Default selected value
         ),
         ]),
         # Output for displaying the heatmap
-        # dcc.Graph(id='heatmap_output', figure=heatmap_generator())
+        dcc.Graph(id='heatmap_output',
+                #   figure=heatmap_generator()
+                  )
     ]
     ##add another html.div for a new visualisation
 )
@@ -182,6 +173,7 @@ app.layout = html.Div(
     State('upload-data', 'filename')
 )
 def update_file_selection(data, name):
+    
     #parses the data and converts it to a dataframe
     df_data = parse_contents(data, name)
     
@@ -191,33 +183,53 @@ def update_file_selection(data, name):
                     'FileName_WGA', 'PathName_Actin', 'PathName_DNA', 'PathName_DNA2', 'PathName_Golgi',
                      'PathName_Mito', 'PathName_NileRed', 'PathName_WGA', 'Metadata_Frame', 
                     'ObjectNumber', 'Metadata_Series'], axis =1, inplace = True)
-
+    
     #Grouping untr-50 and untr observations into untr
     # Replace 'untr-50' with 'untr' in the 'Metadata_Metadata_Cytokine' column
     df_data['Metadata_Metadata_Cytokine'] = df_data['Metadata_Metadata_Cytokine'].replace('untr-50', 'untr')
-
+    
     features_of_interest = df_data.columns[5:]
-
+    
     # Perform groupby and calculate average
     mean_df = df_data.groupby(['ImageNumber','Metadata_Metadata_Cytokine', 'Metadata_Metadata_Dose',
                                         'Metadata_Plate', 'Metadata_Well'])[features_of_interest].mean().reset_index()
     
-    return json.dumps(mean_df)
+    # Reference: https://stackoverflow.com/questions/51770485/typeerror-object-of-type-dataframe-is-not-json-serializable
+    return json.dumps(mean_df.to_json())
 
+# Update cytokine column name selection
 @callback(
     Output('name_of_cytokine_column_dropdown', 'options'),
     Input('data_store', 'data')    
 )
-def update_cyto_dropdown(data):
-    df_data = pd.read_json(data)
-    print('made it here')
+def update_cyto_col_dropdown(data):
+    df_data = pd.read_json(json.loads(data))
     return df_data.columns
 
-#Define callback 
-# @callback(Output('heatmap_output', 'figure'), [Input('name_of_cytokine_column_dropdown','value'), Input('cytokine_of_interest_dropdown','value'), 
-#                                             Input('columns_of_interest_dropdown','value')])
-# def update_heatmap(name_of_cytokine_column_dropdown,cytokine_of_interest_dropdown,columns_of_interest_dropdown):
-#     return heatmap_generator(name_of_cytokine_column_dropdown,cytokine_of_interest_dropdown,columns_of_interest_dropdown)
+# Update Cytokine Selection
+@callback(
+    Output('cytokine_of_interest_dropdown', 'options'),
+    Input('name_of_cytokine_column_dropdown', 'value'),
+    State('data_store', 'data')    
+)
+def update_cyto_dropdown(cytokine_name, data):
+    df_data = pd.read_json(json.loads(data))
+    cytokine_ls = df_data[cytokine_name].unique()
+    return cytokine_ls
+
+@callback(Output('heatmap_output', 'figure'),
+          State('data_store', 'data'),
+          State('name_of_cytokine_column_dropdown','value'),
+          State('cytokine_of_interest_dropdown','value'),
+          Input('columns_of_interest_dropdown','value')
+          )
+def update_heatmap(data, cytokine_column_dropdown_value, cytokine_of_interest_dropdown_value, columns_of_interest_dropdown_value):
+    #convert to dataFrame
+    df_data = pd.read_json(json.loads(data))
+    
+    return heatmap_generator(df=df_data, name_of_cytokine_column=cytokine_column_dropdown_value,
+                             cytokine_of_interest=cytokine_of_interest_dropdown_value,
+                             columns_of_interest_for_heatmap=columns_of_interest_dropdown_value)
 
 if __name__ == "__main__":
     app.run_server(debug=True)
