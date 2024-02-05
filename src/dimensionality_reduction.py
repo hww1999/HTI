@@ -128,3 +128,6 @@ def plot_variance_explained(pca_object, title="Variance Explained by Principal C
     # Show the plot
     plt.show()
 
+def return_csv(dataframe, file_path):
+    return dataframe.to_csv(file_path)
+
