@@ -27,6 +27,10 @@ def principal_component_analysis(data, number_of_components = 10,
     4. number_of_column: type(int), this is the number of column including and after which we want to keep all 
     variables for PCA. 
     5. columns_to_keep: type(list), provide the name of all columns to keep in a list  
+
+    Returns: 
+    1. pca: returns the entire PCA Object 
+    2. relevant_columns: returns the columns used in the principal component analysis
     
     '''
     
@@ -53,7 +57,6 @@ def principal_component_analysis(data, number_of_components = 10,
 
     # Apply Min-Max scaling to selected columns
     relevant_dataset_scaled = scaler.fit_transform(relevant_dataset) 
-    temp = relevant_dataset_scaled
     
     #Perform PCA 
     
@@ -62,10 +65,24 @@ def principal_component_analysis(data, number_of_components = 10,
     # Fit PCA on the standardized data
     principal_components = pca.fit_transform(relevant_dataset_scaled)
     
-    return pca, relevant_columns, temp
+    return pca, relevant_columns
 
 ## Function 2 
 def view_principal_components(pca_object, columns_used_for_pca, number_of_components):
+
+    '''
+    This functions assists in viewing the weights of the principal components. A new column is added to the display which calculates the 
+    absolute sum of the weights across all components and sorts by that column in descending column. 
+
+    Inputs: 
+    1. pca_object: the entire principal component object 
+    2. columns_used: the original columns used for pca 
+    3. number_of_components: the number of components used for the principal component analysis for which the object is passed in 
+
+    Output:
+    1. fig: A heatmap of the weights matrix 
+    2. weights_df_transposed: The dataframe of weights transposed
+    '''
     
     weights_df = pd.DataFrame(pca_object.components_,columns=columns_used_for_pca)
     weights_df_transposed = weights_df.T
@@ -86,7 +103,7 @@ def view_principal_components(pca_object, columns_used_for_pca, number_of_compon
     
 
 #Function 3 
-def get_features_below_threshold(dataframe, threshold):
+def get_features_below_threshold(dataframe, threshold):  
     # Drop features below the threshold
     filtered_dataframe = dataframe[dataframe['sum_of_abs_weights'] >= threshold].reset_index()
 
@@ -94,6 +111,18 @@ def get_features_below_threshold(dataframe, threshold):
 
 #Function 4 
 def plot_variance_explained(pca_object, title="Variance Explained by Principal Components"):
+
+    '''
+    This function returns a graph showing variance explained by each principal component using a bar chart and a line chart to express 
+    cummulative variance explained by additional principal components.
+
+    Inputs: 
+    1. pca_object: takes the original pca object to extract relevant attributes 
+    2. titles: type(string), Optional, the title for the graph 
+
+    Outputs:
+    Prints the graph 
+    '''
     # Get the percentage of variance explained by each principal component
     variance_explained_ratio = pca_object.explained_variance_ratio_
 
@@ -129,5 +158,8 @@ def plot_variance_explained(pca_object, title="Variance Explained by Principal C
     plt.show()
 
 def return_csv(dataframe, file_path):
+    '''
+    This function takes in a dataframe and filepath and stores it to a csv file.
+    '''
     return dataframe.to_csv(file_path)
 
