@@ -14,7 +14,7 @@ import sys
 
 # Custom Functions
 sys.path.append('/home/logan/MSDS/Capstone/HTI/src')
-from heatmaps import heatmap_generator
+from heatmaps import corr_heatmap_generator
 
 def parse_contents(contents, filename):
     _, content_string = contents.split(',')
@@ -117,18 +117,14 @@ def update_file_selection(data, name):
                      'PathName_Mito', 'PathName_NileRed', 'PathName_WGA', 'Metadata_Frame', 
                     'ObjectNumber', 'Metadata_Series'], axis =1, inplace = True)
     
+    print('made it here')
+    
     #Grouping untr-50 and untr observations into untr
     # Replace 'untr-50' with 'untr' in the 'Metadata_Metadata_Cytokine' column
     df_data['Metadata_Metadata_Cytokine'] = df_data['Metadata_Metadata_Cytokine'].replace('untr-50', 'untr')
     
-    features_of_interest = df_data.columns[5:]
-    
-    # Perform groupby and calculate average
-    mean_df = df_data.groupby(['ImageNumber','Metadata_Metadata_Cytokine', 'Metadata_Metadata_Dose',
-                                        'Metadata_Plate', 'Metadata_Well'])[features_of_interest].mean().reset_index()
-    
     # Reference: https://stackoverflow.com/questions/51770485/typeerror-object-of-type-dataframe-is-not-json-serializable
-    return json.dumps(mean_df.to_json())
+    return json.dumps(df_data.to_json())
 
 # Update cytokine column name selection
 @callback(
@@ -160,7 +156,7 @@ def update_heatmap(data, cytokine_column_dropdown_value, cytokine_of_interest_dr
     #convert to dataFrame
     df_data = pd.read_json(json.loads(data))
     
-    return heatmap_generator(df=df_data, name_of_cytokine_column=cytokine_column_dropdown_value,
+    return corr_heatmap_generator(df=df_data, name_of_cytokine_column=cytokine_column_dropdown_value,
                              cytokine_of_interest=cytokine_of_interest_dropdown_value,
                              columns_of_interest_for_heatmap=columns_of_interest_dropdown_value)
 

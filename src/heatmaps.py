@@ -4,7 +4,9 @@ import plotly.express as px
 # FUNCTIONS
 
 #Function for drawing heatmap 
-def heatmap_generator(df, name_of_cytokine_column = 'Metadata_Metadata_Cytokine', cytokine_of_interest = 'EGF', 
+def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_Cytokine', 'Metadata_Metadata_Dose',
+                                        'Metadata_Plate', 'Metadata_Well'],
+                           name_of_cytokine_column = 'Metadata_Metadata_Cytokine', cytokine_of_interest = 'EGF', 
                       columns_of_interest_for_heatmap = 'Granularity'):
     
     '''
@@ -12,20 +14,27 @@ def heatmap_generator(df, name_of_cytokine_column = 'Metadata_Metadata_Cytokine'
     
     Arguments:
 
-    - dataframe: the dataframe which is going to be used for finding correlation
+    - dataframe: the dataframe which is going to be used for finding correlation. Note: this dataframe must
+    only contain numerical values, as the function will perform a groupby and take the mean of all remaining
+    features. Furthermore, the features you wish to group by must be
+    - groupby_cols: a list of the column names of the dataframe that you wish to groupby
     - name_of_cytokine_column: the name of the column which has different cytokine types
     - cytokine_of_interest: the name of the cytokine we wish to filter the data by
     and evaluate its effect on different features 
-    - columns_of_interest_for_heatmap: the main attribute we are interested in e.g. Granularity, Intensity etc.
-    
-    Output: 
-    
-    - Prints heatmap of the selected features and type of cytokine 
+    - columns_of_interest_for_heatmap: the main attribute we are interested in, e.g. 'Granularity',
+    'Intensity', etc. It selects all features that begin with the provided argument.
     
     Returns: 
     
     - Plotly figure object
     '''
+    # get the remaining columns
+    # Reference: https://stackoverflow.com/questions/3428536/how-do-i-subtract-one-list-from-another
+    all_cols = df.columns.to_list()
+    features_of_interest = [elt for elt in all_cols if elt not in groupby_cols]
+    
+    # Perform groupby and calculate average
+    mean_df = df.groupby(groupby_cols)[features_of_interest].mean().reset_index()
     
     filtered_dataframe = df[df[name_of_cytokine_column] == 
                                    cytokine_of_interest].drop(['Metadata_Well'], axis = 1)
@@ -44,7 +53,7 @@ def heatmap_generator(df, name_of_cytokine_column = 'Metadata_Metadata_Cytokine'
                 x=corr_matrix.columns,
                 y=corr_matrix.columns,
                 labels=dict(color='Correlation'),
-                color_continuous_scale='RdBu',
+                color_continuous_scale='RdBu_r',
                 title=f"Correlation Matrix Heatmap for the Cytokine: {cytokine_of_interest}",
                 width=1000, height=1000)
 
@@ -72,3 +81,6 @@ def heatmap_generator(df, name_of_cytokine_column = 'Metadata_Metadata_Cytokine'
         )
     
     return fig
+
+# def danish_preprocessing(df):
+    
