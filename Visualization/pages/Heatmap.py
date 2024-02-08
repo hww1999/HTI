@@ -15,8 +15,8 @@ from heatmaps import heatmap_generator
 dash.register_page(__name__)
 
 layout = html.Div([
-    html.H1('This is our heatmap'),
-    html.Div('This is our Archive page content.'),
+    html.H1('This is our heatmap of correlations'),
+    html.Div('This is our heatmap of correlations'),
     html.Div([
         dcc.Dropdown(
             placeholder='Choose Cytokine of Interest',
