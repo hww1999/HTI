@@ -111,17 +111,18 @@ def update_file_selection(data, name):
     df_data = parse_contents(data, name)
     
     # Danish's Preprocessing for perinuclear
-    df_data.drop(['Metadata_Date', 'Metadata_FileLocation', 'Metadata_Run' , 'FileName_Actin',
-                    'FileName_DNA', 'FileName_DNA2' , 'FileName_Golgi', 'FileName_Mito', 'FileName_NileRed', 
-                    'FileName_WGA', 'PathName_Actin', 'PathName_DNA', 'PathName_DNA2', 'PathName_Golgi',
-                     'PathName_Mito', 'PathName_NileRed', 'PathName_WGA', 'Metadata_Frame', 
-                    'ObjectNumber', 'Metadata_Series'], axis =1, inplace = True)
+    # df_data.drop(['Metadata_Date', 'Metadata_FileLocation', 'Metadata_Run' , 'FileName_Actin',
+    #                 'FileName_DNA', 'FileName_DNA2' , 'FileName_Golgi', 'FileName_Mito', 'FileName_NileRed', 
+    #                 'FileName_WGA', 'PathName_Actin', 'PathName_DNA', 'PathName_DNA2', 'PathName_Golgi',
+    #                  'PathName_Mito', 'PathName_NileRed', 'PathName_WGA', 'Metadata_Frame', 
+    #                 'ObjectNumber', 'Metadata_Series'], axis =1, inplace = True)
     
-    print('made it here')
+    # additional preprocessing needed beyond Matthew's
+    # df_data.drop(['ObjectNumber', 'Metadata_well'], axis=1, inplace=True)
     
     #Grouping untr-50 and untr observations into untr
     # Replace 'untr-50' with 'untr' in the 'Metadata_Metadata_Cytokine' column
-    df_data['Metadata_Metadata_Cytokine'] = df_data['Metadata_Metadata_Cytokine'].replace('untr-50', 'untr')
+    # df_data['Metadata_Metadata_Cytokine'] = df_data['Metadata_Metadata_Cytokine'].replace('untr-50', 'untr')
     
     # Reference: https://stackoverflow.com/questions/51770485/typeerror-object-of-type-dataframe-is-not-json-serializable
     return json.dumps(df_data.to_json())

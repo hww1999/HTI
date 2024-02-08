@@ -15,8 +15,8 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
     Arguments:
 
     - dataframe: the dataframe which is going to be used for finding correlation. Note: this dataframe must
-    only contain numerical values, as the function will perform a groupby and take the mean of all remaining
-    features. Furthermore, the features you wish to group by must be
+    only contain numerical values, as the function will perform a groupby and take the mean of all
+    features.
     - groupby_cols: a list of the column names of the dataframe that you wish to groupby
     - name_of_cytokine_column: the name of the column which has different cytokine types
     - cytokine_of_interest: the name of the cytokine we wish to filter the data by
@@ -34,19 +34,19 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
     features_of_interest = [elt for elt in all_cols if elt not in groupby_cols]
     
     # Perform groupby and calculate average
-    mean_df = df.groupby(groupby_cols)[features_of_interest].mean().reset_index()
+    df = df.groupby(groupby_cols)[features_of_interest].mean().reset_index()
     
-    filtered_dataframe = df[df[name_of_cytokine_column] == 
-                                   cytokine_of_interest].drop(['Metadata_Well'], axis = 1)
+    # filtered_dataframe = df[df[name_of_cytokine_column] == 
+    #                                cytokine_of_interest].drop(['Metadata_Well'], axis = 1)
     
-    # Select columns starting with "columns_of_interest_for_heatmap"
+    # Select columns starting with columns_of_interest_for_heatmap
     selected_columns = df.filter(regex=f'^{columns_of_interest_for_heatmap}_', axis=1).columns.tolist()
     
     # Append dose to selected columns 
     selected_columns.append('Metadata_Metadata_Dose')
     
     # Calculate the correlation matrix
-    corr_matrix = filtered_dataframe[selected_columns].corr()
+    corr_matrix = df[selected_columns].corr()
 
     # Create an interactive heatmap with hover text
     fig = px.imshow(corr_matrix,
