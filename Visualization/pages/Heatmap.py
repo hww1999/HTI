@@ -10,8 +10,8 @@ from plotly.subplots import make_subplots
 from dash import Dash, dcc, html, Input, Output, State, callback
 
 # Custom Functions
-sys.path.append('C:/Users/wuron/Desktop/BRI/src')
-from heatmaps import heatmap_generator
+sys.path.append('/home/logan/MSDS/Capstone/HTI/src')
+from heatmaps import corr_heatmap_generator
 dash.register_page(__name__)
 
 layout = html.Div([

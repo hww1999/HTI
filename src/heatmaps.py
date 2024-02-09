@@ -14,9 +14,9 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
     
     Arguments:
 
-    - dataframe: the dataframe which is going to be used for finding correlation. Note: this dataframe must
-    only contain numerical values, as the function will perform a groupby and take the mean of all
-    features.
+    - dataframe: the dataframe which is going to be used for finding correlation. Note: all columns in
+    this dataframe that are not numerical must be listed in the groupby_cols argumnent,
+    as the function will perform a groupby and take the mean of all other features.
     - groupby_cols: a list of the column names of the dataframe that you wish to groupby
     - name_of_cytokine_column: the name of the column which has different cytokine types
     - cytokine_of_interest: the name of the cytokine we wish to filter the data by
@@ -35,9 +35,6 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
     
     # Perform groupby and calculate average
     df = df.groupby(groupby_cols)[features_of_interest].mean().reset_index()
-    
-    # filtered_dataframe = df[df[name_of_cytokine_column] == 
-    #                                cytokine_of_interest].drop(['Metadata_Well'], axis = 1)
     
     # Select columns starting with columns_of_interest_for_heatmap
     selected_columns = df.filter(regex=f'^{columns_of_interest_for_heatmap}_', axis=1).columns.tolist()
@@ -80,7 +77,4 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
             line=dict(color='black', width=1)
         )
     
-    return fig
-
-# def danish_preprocessing(df):
-    
+    return fig    
