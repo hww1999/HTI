@@ -105,7 +105,7 @@ def update_graph2(c, d, sd, y, group_by_well, dfs):
         if group_by_well:
             cd = df.groupby(by=['Metadata_Metadata_Cytokine', 
                                 'Metadata_Metadata_Dose',
-                                'Metadata_Well']).mean().index
+                                'Metadata_Well'])[y].mean().index
         
             for i in cd:
                 c = i[0]
@@ -117,7 +117,7 @@ def update_graph2(c, d, sd, y, group_by_well, dfs):
                 subdata[name] = curr[curr['Metadata_Well']==w][y]
         else:
             cd = df.groupby(by=['Metadata_Metadata_Cytokine', 
-                                'Metadata_Metadata_Dose']).mean().index
+                                'Metadata_Metadata_Dose'])[y].mean().index
             for i in cd:
                 c = i[0]
                 d = i[1]
