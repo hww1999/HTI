@@ -10,7 +10,7 @@ from plotly.subplots import make_subplots
 from dash import Dash, dcc, html, Input, Output, State, callback
 
 # Custom Functions
-sys.path.append('/home/logan/MSDS/Capstone/HTI/src')
+sys.path.append('../src')
 from heatmaps import corr_heatmap_generator
 dash.register_page(__name__)
 
@@ -51,7 +51,8 @@ def update_heatmap(data, cytokine_of_interest_dropdown_value, group):
     df_data = json.loads(data)
     for k, v in zip(df_data.keys(), df_data.values()):
         df = pd.read_json(v, orient='split')
-        fig = heatmap_generator(df=df, name_of_cytokine_column='Metadata_Metadata_Cytokine',
-                             cytokine_of_interest=cytokine_of_interest_dropdown_value[1:-1],
-                             columns_of_interest_for_heatmap=group[1:-1])
+        fig = corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_Cytokine', 'Metadata_Metadata_Dose',
+                                        'Metadata_Plate', 'Metadata_Well'], name_of_cytokine_column = 'Metadata_Metadata_Cytokine', 
+                                cytokine_of_interest = cytokine_of_interest_dropdown_value[1:-1], 
+                                columns_of_interest_for_heatmap = group[1:-1])
     return fig
