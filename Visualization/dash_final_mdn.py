@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output
 
 ##Data Preprocessing 
 
-df_perinuclear = pd.read_csv('/Users/apple/Desktop/DATA_590/BRI_Capstone/PAM194_Keratino_CytoPanel_1/pam194ObjPerinuclear.csv', 
+df_perinuclear = pd.read_csv('/Users/apple/Desktop/DATA_590/BRI_Capstone/PAM194_Keratino_CytoPanel_1/pam194ObjPerinucCyto.csv', 
                             low_memory = False)
 
 
