@@ -1,5 +1,7 @@
 # Imports
 import plotly.express as px
+import numpy as np
+import pandas as pd
 
 # FUNCTIONS
 
@@ -78,3 +80,52 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
         )
     
     return fig    
+
+def corr_pairs(df):
+    '''
+    This function computes the pair-wise correlation between the features of a dataframe
+    
+    Arguments:
+
+    - df: the dataframe containing the data you wish to compute the correlation for
+    
+    Returns: 
+    
+    - Pandas DataFrame containing the correlation values for each pair of features
+    
+    Notes: 
+    - This function will return values of NaN for pair-wise correlation involving a feature
+    with no variance in the dataset
+    -  This function ignores non-numeric features in the provided df
+    '''
+    # compute correlation
+    corr_df = df.corr(numeric_only=True)
+    
+    # reshape the data into a single column
+    corr_array = corr_df.to_numpy()
+    corr_array = np.reshape(a=corr_array, newshape=(-1, 1))
+    
+    feature_names = corr_df.columns.to_list()
+    
+    num_features = len(feature_names)
+    new_df_rows = []
+    corr_idx = 0
+    
+    # construct rows of new dataframe
+    for i in range(num_features):
+        for j in range(num_features):
+
+            if i == j: # we can throw out the entries for the correlation of a feature with itself
+                corr_idx += 1
+            else: #construct a row
+                corr_value = corr_array[corr_idx]
+                # Reference: https://stackoverflow.com/questions/8220702/how-to-fix-typeerror-int-object-is-not-subscriptable
+                new_row = [feature_names[i], feature_names[j], corr_value[0]]
+                new_df_rows.append(new_row)
+                
+                corr_idx += 1
+    
+    # combine rows into new dataframe
+    pairwise_df = pd.DataFrame(data=new_df_rows, columns=['Feature_1', 'Feature_2', 'Correlation'])
+    
+    return pairwise_df
