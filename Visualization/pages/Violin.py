@@ -62,6 +62,7 @@ def update_dropdown(df):
 @callback(Output('dose', 'options'), Input('doses', 'data'))
 def update_dropdown(df):
     doses = df[1:-1].split(', ')
+
     doses = [eval(i[1:-1]) for i in doses]
     return sorted(doses)
 
