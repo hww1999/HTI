@@ -7,10 +7,6 @@ from io import StringIO
 from plotly.colors import n_colors
 from plotly.subplots import make_subplots
 from dash import Dash, dcc, html, Input, Output, State, callback
-
-# Custom Functions
-# sys.path.append('../src')
-# from heatmaps import corr_heatmap_generator
 from src.heatmaps import corr_heatmap_generator
 dash.register_page(__name__)
 
