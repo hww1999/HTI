@@ -63,7 +63,8 @@ def update_dropdown(df):
 @callback(Output('dose', 'options'), Input('doses', 'data'))
 def update_dropdown(df):
     doses = df[1:-1].split(', ')
-    doses = [int(i[1:-1]) for i in doses]
+    doses = [eval(i[1:-1]) for i in doses]
+    print(doses)
     return sorted(doses)
 
 @callback(Output('var', 'options'), Input('df-columns', 'data'))
@@ -129,7 +130,6 @@ def update_graph2(c, d, sd, y, group_by_well, dfs):
         
         for data_line, color in zip(subdata.keys(), colors):
             x = subdata[data_line]
-            print(x)
             fig.append_trace(go.Violin(x=x, line_color=color, 
                                     name=data_line), row = 1, col = 1)
             m = np.mean(x)

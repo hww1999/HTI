@@ -5,11 +5,10 @@ import plotly.express as px
 import numpy as np
 from io import StringIO
 from plotly.colors import n_colors
-# from src.ttest_plot import generate_violins, well_ttest
 from plotly.subplots import make_subplots
 from dash import Dash, dcc, html, Input, Output, State, callback
 
-app = Dash(__name__, use_pages=True)
+app = Dash(__name__, use_pages=True, pages_folder="Visualization/pages")
 
 app.layout = html.Div([
     # html.H1('Multi-page app with Dash Pages'),
