@@ -7,8 +7,7 @@ from io import StringIO
 from plotly.colors import n_colors
 from plotly.subplots import make_subplots
 from dash import Dash, dcc, html, Input, Output, State, callback
-# sys.path.append('C:/Users/wuron/Desktop/BRI/src')
-# from functions import replace_outliers_with_sd
+from src.violinPlots import generate_violins
 dash.register_page(__name__)
 
 layout = html.Div([
@@ -63,7 +62,8 @@ def update_dropdown(df):
 @callback(Output('dose', 'options'), Input('doses', 'data'))
 def update_dropdown(df):
     doses = df[1:-1].split(', ')
-    doses = [eval(i[1:-1]) for i in doses] # could be int or double
+
+    doses = [eval(i[1:-1]) for i in doses]
     return sorted(doses)
 
 @callback(Output('var', 'options'), Input('df-columns', 'data'))
@@ -90,11 +90,7 @@ def update_output(value):
     )
 def update_graph2(c, d, sd, y, group_by_well, dfs):
     dfs = json.loads(dfs)
-    annotation = ' (' + str(sd)+' sds away)'
-    fig = make_subplots(rows=1, cols=1, 
-                        subplot_titles=list(dfs.keys()),
-                        shared_xaxes=True, 
-                        x_title=y)
+
     for k, v in zip(dfs.keys(), dfs.values()):
         data = pd.read_json(v, orient='split')
         data = data[data['Metadata_Metadata_Cytokine']==c]
@@ -108,55 +104,23 @@ def update_graph2(c, d, sd, y, group_by_well, dfs):
                                 'Metadata_Well'])[y].mean().index
         
             for i in cd:
-                c = i[0]
+                # c = i[0]
                 d = i[1]
                 w = i[2]
                 name = c + ' ' + str(d) + ' ' + w
-                curr = df[df['Metadata_Metadata_Cytokine']==c]
-                curr = curr[curr['Metadata_Metadata_Dose']==d]
+                # curr = df[df['Metadata_Metadata_Cytokine']==c]
+                curr = df[df['Metadata_Metadata_Dose']==d]
                 subdata[name] = curr[curr['Metadata_Well']==w][y]
         else:
             cd = df.groupby(by=['Metadata_Metadata_Cytokine', 
                                 'Metadata_Metadata_Dose'])[y].mean().index
             for i in cd:
-                c = i[0]
+                # c = i[0]
                 d = i[1]
                 name = c + ' ' + str(d)
-                curr = df[df['Metadata_Metadata_Cytokine']==c]
-                subdata[name] = curr[curr['Metadata_Metadata_Dose']==d][y]
-        colors = n_colors('rgb(5, 200, 200)', 'rgb(200, 10, 10)', 
-                          len(subdata), colortype='rgb') if len(subdata) > 1 else ['rgb(5, 200, 200)']
-        
-        for data_line, color in zip(subdata.keys(), colors):
-            x = subdata[data_line]
-            print(x)
-            fig.append_trace(go.Violin(x=x, line_color=color, 
-                                    name=data_line), row = 1, col = 1)
-            m = np.mean(x)
-            std = np.std(x)
-            l = m-sd*std
-            r = m+sd*std
-            if r <= max(x):
-                fig.add_vline(x=r, line_dash="dash", line_color=color, row=1, col=1)
-            if l >= min(x):
-                fig.add_vline(x=l, line_dash="dash", line_color=color, row=1, col=1)
-    fig.update_layout(
-        autosize=True,
-        height = 400 * len(dfs),
-        margin=dict(
-            l=20,
-            r=20,
-            b=50,
-            t=50,
-            pad=4
-        ),
-        paper_bgcolor="LightSteelBlue",
-        title = y + annotation
-    )
-    # fig.update(layout_showlegend=False)
-    fig.update_traces(orientation='h', side='positive', 
-                      width=3, points='outliers')
-    fig.update_layout(xaxis_showgrid=False, xaxis_zeroline=False)
-    fig.add_vline(x=0, line_width=3, line_dash="dash", line_color="green")
+                # curr = df[df['Metadata_Metadata_Cytokine']==c]
+                subdata[name] = df[df['Metadata_Metadata_Dose']==d][y]
+        fig = generate_violins(subdata, y, sd)
+
 
     return fig

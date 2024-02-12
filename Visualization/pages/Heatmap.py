@@ -5,13 +5,9 @@ import plotly.express as px
 import numpy as np
 from io import StringIO
 from plotly.colors import n_colors
-# from src.ttest_plot import generate_violins, well_ttest
 from plotly.subplots import make_subplots
 from dash import Dash, dcc, html, Input, Output, State, callback
-
-# Custom Functions
-sys.path.append('../src')
-from heatmaps import corr_heatmap_generator
+from src.heatmaps import corr_heatmap_generator
 dash.register_page(__name__)
 
 layout = html.Div([
