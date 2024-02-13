@@ -1,5 +1,7 @@
 # Imports
 import plotly.express as px
+import numpy as np
+import pandas as pd
 
 # FUNCTIONS
 
@@ -14,9 +16,9 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
     
     Arguments:
 
-    - dataframe: the dataframe which is going to be used for finding correlation. Note: this dataframe must
-    only contain numerical values, as the function will perform a groupby and take the mean of all
-    features.
+    - dataframe: the dataframe which is going to be used for finding correlation. Note: all columns in
+    this dataframe that are not numerical must be listed in the groupby_cols argumnent,
+    as the function will perform a groupby and take the mean of all other features.
     - groupby_cols: a list of the column names of the dataframe that you wish to groupby
     - name_of_cytokine_column: the name of the column which has different cytokine types
     - cytokine_of_interest: the name of the cytokine we wish to filter the data by
@@ -35,9 +37,6 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
     
     # Perform groupby and calculate average
     df = df.groupby(groupby_cols)[features_of_interest].mean().reset_index()
-    
-    # filtered_dataframe = df[df[name_of_cytokine_column] == 
-    #                                cytokine_of_interest].drop(['Metadata_Well'], axis = 1)
     
     # Select columns starting with columns_of_interest_for_heatmap
     selected_columns = df.filter(regex=f'^{columns_of_interest_for_heatmap}_', axis=1).columns.tolist()
@@ -80,7 +79,53 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
             line=dict(color='black', width=1)
         )
     
-    return fig
+    return fig    
 
-# def danish_preprocessing(df):
+def corr_pairs(df):
+    '''
+    This function computes the pair-wise correlation between the features of a dataframe
     
+    Arguments:
+
+    - df: the dataframe containing the data you wish to compute the correlation for
+    
+    Returns: 
+    
+    - Pandas DataFrame containing the correlation values for each pair of features
+    
+    Notes: 
+    - This function will return values of NaN for pair-wise correlation involving a feature
+    with no variance in the dataset
+    -  This function ignores non-numeric features in the provided df
+    '''
+    # compute correlation
+    corr_df = df.corr(numeric_only=True)
+    
+    # reshape the data into a single column
+    corr_array = corr_df.to_numpy()
+    corr_array = np.reshape(a=corr_array, newshape=(-1, 1))
+    
+    feature_names = corr_df.columns.to_list()
+    
+    num_features = len(feature_names)
+    new_df_rows = []
+    corr_idx = 0
+    
+    # construct rows of new dataframe
+    for i in range(num_features):
+        for j in range(num_features):
+
+            if i == j: # we can throw out the entries for the correlation of a feature with itself
+                corr_idx += 1
+            else: #construct a row
+                corr_value = corr_array[corr_idx]
+                # Reference: https://stackoverflow.com/questions/8220702/how-to-fix-typeerror-int-object-is-not-subscriptable
+                new_row = [feature_names[i], feature_names[j], corr_value[0]]
+                new_df_rows.append(new_row)
+                
+                corr_idx += 1
+    
+    # combine rows into new dataframe
+    pairwise_df = pd.DataFrame(data=new_df_rows, columns=['Feature_1', 'Feature_2', 'Correlation'])
+    
+    return pairwise_df

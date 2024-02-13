@@ -1,14 +1,13 @@
-import base64, csv, io, os, json, dash
+import base64, csv, io, os, json, dash, sys
 import plotly.graph_objects as go
 import pandas as pd
 import plotly.express as px
 import numpy as np
 from io import StringIO
 from plotly.colors import n_colors
-# from src.ttest_plot import generate_violins, well_ttest
 from plotly.subplots import make_subplots
 from dash import Dash, dcc, html, Input, Output, State, callback
-
+from src.violinPlots import generate_violins
 dash.register_page(__name__)
 
 layout = html.Div([
@@ -36,6 +35,12 @@ layout = html.Div([
             id='dose',
             inline=True
         ),
+        html.Div('Select Group by Wells'),
+        dcc.Checklist(
+            ['Group by Well'],
+            id='group_by_well',
+            inline=True
+        ),
         dcc.Slider(1, 6, 1,
                value=4,
                id='sd'
@@ -57,7 +62,8 @@ def update_dropdown(df):
 @callback(Output('dose', 'options'), Input('doses', 'data'))
 def update_dropdown(df):
     doses = df[1:-1].split(', ')
-    doses = [int(i[1:-1]) for i in doses]
+
+    doses = [eval(i[1:-1]) for i in doses]
     return sorted(doses)
 
 @callback(Output('var', 'options'), Input('df-columns', 'data'))
@@ -78,67 +84,43 @@ def update_output(value):
     Input('dose', 'value'), 
     Input('sd', 'value'),
     Input('var', 'value'), 
+    Input('group_by_well', 'value'), 
     State('dfs', 'data'),
     prevent_initial_call=True
     )
-def update_graph2(c, d, sd, y, dfs):
+def update_graph2(c, d, sd, y, group_by_well, dfs):
     dfs = json.loads(dfs)
-    annotation = ' (' + str(sd)+' sds away)'
-    fig = make_subplots(rows=len(dfs), cols=1, 
-                        subplot_titles=list(dfs.keys()),
-                        shared_xaxes=True, 
-                        x_title=y)
-    i = 1
+
     for k, v in zip(dfs.keys(), dfs.values()):
         data = pd.read_json(v, orient='split')
         data = data[data['Metadata_Metadata_Cytokine']==c]
         df = pd.DataFrame()
         for dose in d:
             df = pd.concat([df, data[data['Metadata_Metadata_Dose']==dose]])
-
-        try:
-            wells = df['Metadata_Well'].unique()
-            colors = n_colors('rgb(5, 200, 200)', 'rgb(200, 10, 10)', len(wells), colortype='rgb')
-            subdata = {}
-            for well in wells:
-                # subdata[c + ' ' + dose + ' ' + well] = df[df['Metadata_Well']==well]
-                curr = df[df['Metadata_Well']==well]
-                currdose = curr['Metadata_Metadata_Dose'].iloc[0]
-                subdata[c + ' ' + str(currdose) + ' ' + well] = curr
-            for data_line, color in zip(subdata.keys(), colors):
-                x = subdata[data_line][y]
-                fig.append_trace(go.Violin(x=x, line_color=color, 
-                                        name=data_line), row = i, col = 1)
-                m = np.mean(x)
-                std = np.std(x)
-                l = m-sd*std
-                r = m+sd*std
-                if r <= max(x):
-                    fig.add_vline(x=r, line_dash="dash", line_color=color, row=i, col=1)
-                if l >= min(x):
-                    fig.add_vline(x=l, line_dash="dash", line_color=color, row=i, col=1)
-        except:
-            pass
+        subdata = {}
+        if group_by_well:
+            cd = df.groupby(by=['Metadata_Metadata_Cytokine', 
+                                'Metadata_Metadata_Dose',
+                                'Metadata_Well'])[y].mean().index
         
-        i += 1
+            for i in cd:
+                # c = i[0]
+                d = i[1]
+                w = i[2]
+                name = c + ' ' + str(d) + ' ' + w
+                # curr = df[df['Metadata_Metadata_Cytokine']==c]
+                curr = df[df['Metadata_Metadata_Dose']==d]
+                subdata[name] = curr[curr['Metadata_Well']==w][y]
+        else:
+            cd = df.groupby(by=['Metadata_Metadata_Cytokine', 
+                                'Metadata_Metadata_Dose'])[y].mean().index
+            for i in cd:
+                # c = i[0]
+                d = i[1]
+                name = c + ' ' + str(d)
+                # curr = df[df['Metadata_Metadata_Cytokine']==c]
+                subdata[name] = df[df['Metadata_Metadata_Dose']==d][y]
+        fig = generate_violins(subdata, y, sd)
 
-    fig.update_layout(
-        autosize=True,
-        height = 400 * len(dfs),
-        margin=dict(
-            l=20,
-            r=20,
-            b=50,
-            t=50,
-            pad=4
-        ),
-        paper_bgcolor="LightSteelBlue",
-        title = y + annotation
-    )
-    # fig.update(layout_showlegend=False)
-    fig.update_traces(orientation='h', side='positive', 
-                      width=3, points='outliers')
-    fig.update_layout(xaxis_showgrid=False, xaxis_zeroline=False)
-    fig.add_vline(x=0, line_width=3, line_dash="dash", line_color="green")
 
     return fig

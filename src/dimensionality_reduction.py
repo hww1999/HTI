@@ -106,8 +106,9 @@ def view_principal_components(pca_object, columns_used_for_pca, number_of_compon
 def get_features_below_threshold(dataframe, threshold):  
     # Drop features below the threshold
     filtered_dataframe = dataframe[dataframe['sum_of_abs_weights'] >= threshold].reset_index()
+    features_dropped = dataframe[dataframe['sum_of_abs_weights'] < threshold].reset_index()
 
-    return filtered_dataframe['index'].values
+    return filtered_dataframe['index'].values, features_dropped['index'].values
 
 #Function 4 
 def plot_variance_explained(pca_object, title="Variance Explained by Principal Components"):
