@@ -26,6 +26,7 @@ layout = html.Div([
             id='var_plate',
             style={'width': '48%'}
         ),
+        html.Br(),
         html.Div('Results from ANOVA test of the plates'),
         dash_table.DataTable(
             id='plate-anova-table',
@@ -49,7 +50,7 @@ def update_dropdown(df):
 @callback(
     Output('graph4', 'figure'), 
     Output('plate-anova-table', 'data'),
-    # Output('plate-tukey-table', 'data'),
+    Output('plate-tukey-table', 'data'),
     # Input('cytokine_stat', 'value'), 
     # Input('dose_stat', 'value'), 
     Input('var_plate', 'value'), 
@@ -62,26 +63,26 @@ def update_graph4_box(y, dfs):
     for k, v in zip(dfs.keys(), dfs.values()):
         data = pd.read_json(v, orient='split')
         anova_df = run_ANOVA_plates('untr', y, data)
-        # tukey_df = plate_Tukey_HSD('untr', y, data)
+        tukey_df = plate_Tukey_HSD('untr', y, data)
         data = data[data['Metadata_Metadata_Cytokine']=='untr']
     fig = generate_box(data, 'Metadata_Plate', y)
     
-    return fig, anova_df[0].to_dict('records')
+    return fig, anova_df[0].to_dict('records'), tukey_df.to_dict('records')
 
-@callback(
-    # Output('plate-anova-table', 'data'),
-    Output('plate-tukey-table', 'data'),
-    # Input('cytokine_stat', 'value'), 
-    # Input('dose_stat', 'value'), 
-    Input('var_plate', 'value'), 
-    State('dfs', 'data'),
-    prevent_initial_call=True
-    )
-def update_ttest_results(y, dfs):
-    dfs = json.loads(dfs)
+# @callback(
+#     # Output('plate-anova-table', 'data'),
+#     Output('plate-tukey-table', 'data'),
+#     # Input('cytokine_stat', 'value'), 
+#     # Input('dose_stat', 'value'), 
+#     Input('var_plate', 'value'), 
+#     State('dfs', 'data'),
+#     prevent_initial_call=True
+#     )
+# def update_ttest_results(y, dfs):
+#     dfs = json.loads(dfs)
 
-    for k, v in zip(dfs.keys(), dfs.values()):
-        data = pd.read_json(v, orient='split')
+#     for k, v in zip(dfs.keys(), dfs.values()):
+#         data = pd.read_json(v, orient='split')
 
-    tukey_df = plate_Tukey_HSD('untr', y, data)
-    return tukey_df.to_dict('records')
+#     tukey_df = plate_Tukey_HSD('untr', y, data)
+#     return tukey_df.to_dict('records')
