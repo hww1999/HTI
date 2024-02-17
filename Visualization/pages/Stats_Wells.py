@@ -12,8 +12,8 @@ from src.stats_eda import get_ttest_wells_d, plot_by_wells_d
 dash.register_page(__name__)
 
 layout = html.Div([
-    html.H1('This is our visualization for statstical analysis'),
-    html.Div('This is our visualization for statstical analysis'),
+    html.H1('Statstical Analysis between Wells'),
+    html.Div('This is our visualization for statstical analysis between wells'),
     html.Div([
         dcc.Dropdown(
             placeholder='Select Cytokine of Interest',
@@ -30,15 +30,11 @@ layout = html.Div([
             id='dose_stat',
             style={'width': '48%'}
         ),
-        # html.Br(),
-        # html.Div('Select Doses of Interest'),
-        # dcc.Checklist(
-        #     id='dose',
-        #     inline=True
-        # ),
+        html.Div('Results from T-test of the two wells'),
         dash_table.DataTable(
-            id='loading-states-table',
+            id='well-ttest-table',
         ),
+        html.Br(),
         dcc.Graph(id='graph3'), 
         ]),
 ])
@@ -95,6 +91,7 @@ def update_dropdown(df):
 
 @callback(
     Output('graph3', 'figure'), 
+    Output('well-ttest-table', 'data'),
     Input('cytokine_stat', 'value'), 
     Input('dose_stat', 'value'), 
     Input('var_stat', 'value'), 
@@ -109,28 +106,9 @@ def update_graph3_box(c, d, y, dfs):
         data = data[data['Metadata_Metadata_Cytokine']==c]
         data = data[data['Metadata_Metadata_Dose']==d]
     fig = generate_box(data, 'Metadata_Well', y)
+    text_df = get_ttest_wells_d(c, d, y, data)
+    # text_df = text_df.to_dict('records')
+    return fig, text_df.to_dict('records')
 
     # OSError: [WinError 10038]
     # fig = plot_by_wells_d(c, d, y, data)
-
-    return fig
-
-@callback(
-    Output('loading-states-table', 'data'),
-    Input('cytokine_stat', 'value'), 
-    Input('dose_stat', 'value'), 
-    Input('var_stat', 'value'), 
-    State('dfs', 'data'),
-    prevent_initial_call=True
-    )
-def update_ttest_results(c, d, y, dfs):
-    dfs = json.loads(dfs)
-
-    for k, v in zip(dfs.keys(), dfs.values()):
-        data = pd.read_json(v, orient='split')
-
-    text_df = get_ttest_wells_d(c, d, y, data)
-    # text_df = text_df.to_dict('records')
-    return text_df.to_dict('records')
-    
-    # return text_df

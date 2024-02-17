@@ -67,7 +67,7 @@ def generate_box(data, x, col):
     fig = go.Figure()
     # y = data[col]
     fig.add_trace(go.Box(x=data[x], y=data[col],
-                         boxpoints='all', marker_size=2, showwhiskers=True))
+                         boxpoints='outliers', marker_size=6, showwhiskers=True))
 
     fig.update_layout(
         autosize=True,
