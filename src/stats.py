@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import seaborn as sns
+import scipy.stats as stats
 from statsmodels.stats.power import TTestIndPower
 from statsmodels.stats.power import FTestAnovaPower
 from statsmodels.stats.multicomp import pairwise_tukeyhsd

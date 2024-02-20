@@ -60,7 +60,7 @@ def outlier_detection(df, sd, thresh):
         # again, this is calculating the outliers for each specific cytokine, dose, and well in
         # the same order they appear in the original dataframe. 
         for feature in features:
-            test = replace_outliers_with_sd(cell_df, feature, cytokine, dose, well, sd)
+            test = replace_outliers_with_sd(df_copy, feature, cytokine, dose, well, sd)
             col_name = feature + '_outliers'
             outlier_cols.loc[:, col_name] = test
 
