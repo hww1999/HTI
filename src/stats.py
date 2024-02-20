@@ -128,7 +128,7 @@ def run_ANOVA_plates(untr, feature, df):
     F, p = f_oneway(*grps)
     
     # Append the results of our One-Way ANOVA to a dataframe and then return it along with the power
-    final_df.loc[0] = [cytokine, feature, F, p]
+    final_df.loc[0] = [untr, feature, F, p]
 
     return final_df,anova_power
 
@@ -152,9 +152,10 @@ def plot_by_plate(untr, feature, df):
         box.set_facecolor(color)
 
 def plate_Tukey_HSD(untr, feature, df):
-    untr_plates = df[(df['Metadata_Metadata_Cytokine'] == cytokine)]
+    untr_plates = df[(df['Metadata_Metadata_Cytokine'] == untr)]
     untr_plates = untr_plates[['Metadata_Plate', feature]]
-    
+    # should we change from groups=untr_plates['Metadata_Metadata_Dose']
+    # to groups=untr_plates['Metadata_Metadata_Plate']
     res = pairwise_tukeyhsd(endog=untr_plates[feature],
                           groups=untr_plates['Metadata_Metadata_Dose'],
                           alpha=0.05)
