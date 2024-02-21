@@ -87,6 +87,32 @@ def get_ttest_wells(cytokine, feature, df):
                                'T-Statistic': Tstat, 'p-value': Pvalue, 'Power': ttest_power}, ignore_index=True)
     return ttest_df
 
+def get_ttest_wells_d(cytokine, dose, feature, df):
+    ttest_df = pd.DataFrame(columns=['Cytokine', 'Feature', 'Well Comparison', 'T-Statistic', 'p-value', 'Power'])
+    # is it okay if we generalize the Metadata_Metadata_Dose to input by users
+    cytokine_wells = df[(df['Metadata_Metadata_Dose'] == dose) & (df['Metadata_Metadata_Cytokine'] == cytokine)]
+    obs = len(cytokine_wells)
+    wells = cytokine_wells['Metadata_Well'].unique().tolist()
+    
+    well_1 = wells[0]
+    well_2 = wells[1]
+    
+    well_comp = str(well_1) + ' vs ' + str(well_2)
+    
+    well_1_means = cytokine_wells.where(cytokine_wells['Metadata_Well'] == well_1).dropna()[feature]
+    well_2_means = cytokine_wells.where(cytokine_wells['Metadata_Well'] == well_2).dropna()[feature]
+    
+    results = stats.ttest_ind(well_1_means,well_2_means, equal_var=False)
+    power = TTestPower()
+    ttest_power = power.solve_power(nobs=obs, effect_size=0.5, power=None, alpha=0.05)
+    
+    Tstat = round(results[0],3)
+    Pvalue = round(results[1],3)
+    
+    ttest_df = ttest_df.append({'Cytokine' : cytokine, 'Feature': feature, 'Well Comparison': well_comp,
+                               'T-Statistic': Tstat, 'p-value': Pvalue, 'Power': ttest_power}, ignore_index=True)
+    return ttest_df
+
 def plot_by_wells(cytokine, feature, df):
     cytokine_wells = df[(df['Metadata_Metadata_Dose'] == 100) & (df['Metadata_Metadata_Cytokine'] == cytokine)]
     cytokine_wells = cytokine_wells[['Metadata_Well', feature]]

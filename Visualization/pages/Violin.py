@@ -24,11 +24,6 @@ layout = html.Div([
             id='var',
             style={'width': '48%'}
         ),
-        # dcc.Dropdown(
-        #     placeholder='Choose Dose of Interest',
-        #     id='dose',
-        #     style={'width': '48%'}
-        # ),
         html.Br(),
         html.Div('Select Doses of Interest'),
         dcc.Checklist(
@@ -56,13 +51,9 @@ def update_dropdown(df):
     cytokines = [i[1:-1] for i in cytokines]
     return sorted(cytokines)
 
-# @callback(Output('dose', 'options'), Input('doses', 'data'))
-# def update_dropdown(df):
-#     return df[1:-1].split(', ')
 @callback(Output('dose', 'options'), Input('doses', 'data'))
 def update_dropdown(df):
     doses = df[1:-1].split(', ')
-
     doses = [eval(i[1:-1]) for i in doses]
     return sorted(doses)
 
@@ -92,11 +83,15 @@ def update_graph2(c, d, sd, y, group_by_well, dfs):
     dfs = json.loads(dfs)
 
     for k, v in zip(dfs.keys(), dfs.values()):
-        data = pd.read_json(v, orient='split')
-        data = data[data['Metadata_Metadata_Cytokine']==c]
+        data_ori = pd.read_json(v, orient='split')
+        data = data_ori[data_ori['Metadata_Metadata_Cytokine']==c]
+        plate = data['Metadata_Plate'].iloc[0]
+        untr = data_ori[data_ori['Metadata_Metadata_Cytokine']=='untr'][data_ori['Metadata_Plate']==plate]
         df = pd.DataFrame()
         for dose in d:
             df = pd.concat([df, data[data['Metadata_Metadata_Dose']==dose]])
+        if c != 'untr':
+            df = pd.concat([untr, df])
         subdata = {}
         if group_by_well:
             cd = df.groupby(by=['Metadata_Metadata_Cytokine', 
@@ -104,21 +99,21 @@ def update_graph2(c, d, sd, y, group_by_well, dfs):
                                 'Metadata_Well'])[y].mean().index
         
             for i in cd:
-                # c = i[0]
+                c = i[0]
                 d = i[1]
                 w = i[2]
                 name = c + ' ' + str(d) + ' ' + w
-                # curr = df[df['Metadata_Metadata_Cytokine']==c]
+                curr = df[df['Metadata_Metadata_Cytokine']==c]
                 curr = df[df['Metadata_Metadata_Dose']==d]
                 subdata[name] = curr[curr['Metadata_Well']==w][y]
         else:
             cd = df.groupby(by=['Metadata_Metadata_Cytokine', 
                                 'Metadata_Metadata_Dose'])[y].mean().index
             for i in cd:
-                # c = i[0]
+                c = i[0]
                 d = i[1]
                 name = c + ' ' + str(d)
-                # curr = df[df['Metadata_Metadata_Cytokine']==c]
+                curr = df[df['Metadata_Metadata_Cytokine']==c]
                 subdata[name] = df[df['Metadata_Metadata_Dose']==d][y]
         fig = generate_violins(subdata, y, sd)
 

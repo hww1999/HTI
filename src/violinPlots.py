@@ -9,7 +9,8 @@ def generate_violins(data, col, sd=4):
     fig = go.Figure()
     for data_line, color in zip(data.keys(), colors):
         x = data[data_line]#[col]
-            
+        if 'untr' in data_line:
+            color = 'rgb(200, 200, 200)'
         fig.add_trace(go.Violin(x=x, line_color=color, 
                                 name=data_line))
         m = np.mean(x)
@@ -39,7 +40,7 @@ def generate_violins(data, col, sd=4):
                       width=3, points='outliers')
     fig.update_layout(xaxis_showgrid=False, xaxis_zeroline=False, title = col + annotation)
     # fig.add_vrect(x0=0.9, x1=2)
-    fig.add_vline(x=0, line_width=3, line_dash="dash", line_color="green")
+    # fig.add_vline(x=0, line_width=3, line_dash="dash", line_color="green")
     return fig
 
 def generate_group(data, group, c, d):
