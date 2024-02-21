@@ -15,12 +15,6 @@ layout = html.Div([
     html.H1('Statstical Analysis between Plates'),
     html.Div('This is our visualization for statstical analysis between plates'),
     html.Div([
-        # only untr for plates
-        # dcc.Dropdown(
-        #     placeholder='Select Cytokine of Interest',
-        #     id='cytokine_stat',
-        #     style={'width': '48%'}
-        # ),
         dcc.Dropdown(
             placeholder='Select Variable of Interest',
             id='var_plate',
@@ -66,28 +60,10 @@ def update_graph4_box(y, dfs):
         tukey_df = plate_Tukey_HSD('untr', y, data)
         data = data[data['Metadata_Metadata_Cytokine']=='untr']
     fig = generate_box(data, 'Metadata_Plate', y)
-    # tukey_df = tukey_df.summary()
-    # tukey_df = pd.DataFrame.from_records(tukey_df.data)
-    # new_header = tukey_df.iloc[0] #grab the first row for the header
-    # tukey_df = tukey_df[1:] #take the data less the header row
-    # tukey_df.columns = new_header
+    tukey_df = tukey_df.summary()
+    tukey_df = pd.DataFrame.from_records(tukey_df.data)
+    new_header = tukey_df.iloc[0] #grab the first row for the header
+    tukey_df = tukey_df[1:] #take the data less the header row
+    tukey_df.columns = new_header
     
     return fig, anova_df[0].to_dict('records'), tukey_df.to_dict('records')
-
-# @callback(
-#     # Output('plate-anova-table', 'data'),
-#     Output('plate-tukey-table', 'data'),
-#     # Input('cytokine_stat', 'value'), 
-#     # Input('dose_stat', 'value'), 
-#     Input('var_plate', 'value'), 
-#     State('dfs', 'data'),
-#     prevent_initial_call=True
-#     )
-# def update_ttest_results(y, dfs):
-#     dfs = json.loads(dfs)
-
-#     for k, v in zip(dfs.keys(), dfs.values()):
-#         data = pd.read_json(v, orient='split')
-
-#     tukey_df = plate_Tukey_HSD('untr', y, data)
-#     return tukey_df.to_dict('records')
