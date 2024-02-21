@@ -182,9 +182,9 @@ def plate_Tukey_HSD(untr, feature, df):
     untr_plates = df[(df['Metadata_Metadata_Cytokine'] == untr)]
     untr_plates = untr_plates[['Metadata_Plate', feature]]
     # should we change from groups=untr_plates['Metadata_Metadata_Dose']
-    # to groups=untr_plates['Metadata_Metadata_Plate']
+    # to groups=untr_plates['Metadata_Plate']
     res = pairwise_tukeyhsd(endog=untr_plates[feature],
-                          groups=untr_plates['Metadata_Metadata_Dose'],
+                          groups=untr_plates['Metadata_Plate'],
                           alpha=0.05)
     
     return res
