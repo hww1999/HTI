@@ -7,8 +7,8 @@ from io import StringIO
 from plotly.colors import n_colors
 from plotly.subplots import make_subplots
 from dash import dash_table, dcc, html, Input, Output, State, callback
-from src.violinPlots import generate_violins, generate_box
-from src.stats_eda import get_ttest_wells_d, plot_by_wells_d
+from src.violinPlots import generate_box
+from src.stats import get_ttest_wells_d
 dash.register_page(__name__)
 
 layout = html.Div([
@@ -35,7 +35,7 @@ layout = html.Div([
             id='well-ttest-table',
         ),
         html.Br(),
-        dcc.Graph(id='graph3'), 
+        dcc.Graph(id='graph_well'), 
         ]),
 ])
 
@@ -90,7 +90,7 @@ def update_dropdown(df):
 #     return fig
 
 @callback(
-    Output('graph3', 'figure'), 
+    Output('graph_well', 'figure'), 
     Output('well-ttest-table', 'data'),
     Input('cytokine_stat', 'value'), 
     Input('dose_stat', 'value'), 

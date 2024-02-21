@@ -8,7 +8,7 @@ from plotly.colors import n_colors
 from plotly.subplots import make_subplots
 from dash import dash_table, dcc, html, Input, Output, State, callback
 from src.violinPlots import generate_violins, generate_box
-from src.stats_eda import run_ANOVA_plates, plate_Tukey_HSD
+from src.stats import run_ANOVA_plates, plate_Tukey_HSD
 dash.register_page(__name__)
 
 layout = html.Div([
@@ -37,7 +37,7 @@ layout = html.Div([
             id='plate-tukey-table',
         ),
         html.Br(),
-        dcc.Graph(id='graph4'), 
+        dcc.Graph(id='graph_plate'), 
         ]),
 ])
 
@@ -48,7 +48,7 @@ def update_dropdown(df):
     return sorted(vars)
 
 @callback(
-    Output('graph4', 'figure'), 
+    Output('graph_plate', 'figure'), 
     Output('plate-anova-table', 'data'),
     Output('plate-tukey-table', 'data'),
     # Input('cytokine_stat', 'value'), 
@@ -66,6 +66,11 @@ def update_graph4_box(y, dfs):
         tukey_df = plate_Tukey_HSD('untr', y, data)
         data = data[data['Metadata_Metadata_Cytokine']=='untr']
     fig = generate_box(data, 'Metadata_Plate', y)
+    # tukey_df = tukey_df.summary()
+    # tukey_df = pd.DataFrame.from_records(tukey_df.data)
+    # new_header = tukey_df.iloc[0] #grab the first row for the header
+    # tukey_df = tukey_df[1:] #take the data less the header row
+    # tukey_df.columns = new_header
     
     return fig, anova_df[0].to_dict('records'), tukey_df.to_dict('records')
 
