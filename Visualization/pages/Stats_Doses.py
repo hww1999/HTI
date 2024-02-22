@@ -29,15 +29,15 @@ layout = html.Div([
         html.Br(),
         html.Div('Results from ANOVA test of the doses'),
         dash_table.DataTable(
-            id='plate-anova-table',
+            id='dose-anova-table',
         ),
         html.Br(),
         html.Div('Results from Tukey test of the doses'),
         dash_table.DataTable(
-            id='plate-tukey-table',
+            id='dose-tukey-table',
         ),
         html.Br(),
-        dcc.Graph(id='graph4'), 
+        dcc.Graph(id='graph5'), 
         ]),
 ])
 
@@ -48,7 +48,7 @@ def update_dropdown(df):
     return sorted(vars)
 
 @callback(
-    Output('graph4', 'figure'), 
+    Output('graph5', 'figure'), 
     Output('dose-anova-table', 'data'),
     Output('dose-tukey-table', 'data'),
     # Input('cytokine_stat', 'value'), 

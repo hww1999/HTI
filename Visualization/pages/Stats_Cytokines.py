@@ -37,7 +37,7 @@ layout = html.Div([
             id='cytokine-tukey-table',
         ),
         html.Br(),
-        dcc.Graph(id='graph4'), 
+        dcc.Graph(id='graph6'), 
         ]),
 ])
 
@@ -48,7 +48,7 @@ def update_dropdown(df):
     return sorted(vars)
 
 @callback(
-    Output('graph5', 'figure'), 
+    Output('graph6', 'figure'), 
     Output('cytokine-anova-table', 'data'),
     Output('cytokine-tukey-table', 'data'),
     # Input('cytokine_stat', 'value'), 
