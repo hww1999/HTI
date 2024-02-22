@@ -31,11 +31,17 @@ layout = html.Div([
 
 @callback(Output('cytokine1', 'options'), Input('cytokines', 'data'))
 def update_dropdown(df):
-    return df[1:-1].split(', ')
+    cytokines = df[1:-1].split(', ')
+    cytokines = [i[1:-1] for i in cytokines]
+    return sorted(cytokines)
+    # return df[1:-1].split(', ')
 
 @callback(Output('group', 'options'), Input('groups', 'data'))
 def update_dropdown(df):
-    return df[1:-1].split(', ')
+    groups = df[1:-1].split(', ')
+    groups = [i[1:-1] for i in groups]
+    return sorted(groups)
+    # return df[1:-1].split(', ')
 
 @callback(Output('heatmap_output', 'figure'),
           State('dfs', 'data'),
@@ -49,6 +55,6 @@ def update_heatmap(data, cytokine_of_interest_dropdown_value, group):
         df = pd.read_json(v, orient='split')
         fig = corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_Cytokine', 'Metadata_Metadata_Dose',
                                         'Metadata_Plate', 'Metadata_Well'], name_of_cytokine_column = 'Metadata_Metadata_Cytokine', 
-                                cytokine_of_interest = cytokine_of_interest_dropdown_value[1:-1], 
-                                columns_of_interest_for_heatmap = group[1:-1])
+                                cytokine_of_interest = cytokine_of_interest_dropdown_value, 
+                                columns_of_interest_for_heatmap = group)
     return fig
