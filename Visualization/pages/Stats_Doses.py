@@ -22,8 +22,13 @@ layout = html.Div([
         #     style={'width': '48%'}
         # ),
         dcc.Dropdown(
+            placeholder='Select Cytokine of Interest',
+            id='cytokine_stat',
+            style={'width': '48%'}
+        ),
+        dcc.Dropdown(
             placeholder='Select Variable of Interest',
-            id='var_dose',
+            id='var_stat',
             style={'width': '48%'}
         ),
         html.Br(),
@@ -52,8 +57,8 @@ def update_dropdown(df):
     Output('dose-anova-table', 'data'),
     Output('dose-tukey-table', 'data'),
     # Input('cytokine_stat', 'value'), 
-    # Input('dose_stat', 'value'), 
-    Input('var_dose', 'value'), 
+    Input('cytokine_stat', 'value'), 
+    Input('var_stat', 'value'), 
     State('dfs', 'data'),
     prevent_initial_call=True
     )

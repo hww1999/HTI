@@ -187,7 +187,13 @@ def plate_Tukey_HSD(untr, feature, df):
                           groups=untr_plates['Metadata_Plate'],
                           alpha=0.05)
     
-    return res
+    rs = res.summary()
+    rs = pd.DataFrame.from_records(rs.data) # change from rs = pd.DataFrame(rs)
+    new_header = rs.iloc[0] #grab the first row for the header
+    rs = rs[1:] #take the data less the header row
+    rs.columns = new_header #set the header row as the df header
+    
+    return rs
 
 def run_ANOVA_cytokines(df, feature, dose):
     sub_df = df[df['Metadata_Metadata_Dose'] == dose]
@@ -251,4 +257,10 @@ def cytokine_Tukey_HSD(df, feature, dose):
                           groups=cytokines['Metadata_Metadata_Cytokine'],
                           alpha=0.05)
     
-    return res
+    rs = res.summary()
+    rs = pd.DataFrame.from_records(rs.data) # change from rs = pd.DataFrame(rs)
+    new_header = rs.iloc[0] #grab the first row for the header
+    rs = rs[1:] #take the data less the header row
+    rs.columns = new_header #set the header row as the df header
+    
+    return rs
