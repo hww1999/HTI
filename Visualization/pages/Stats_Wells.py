@@ -17,17 +17,17 @@ layout = html.Div([
     html.Div([
         dcc.Dropdown(
             placeholder='Select Cytokine of Interest',
-            id='cytokine_stat',
+            id='cytokine_well',
             style={'width': '48%'}
         ),
         dcc.Dropdown(
             placeholder='Select Variable of Interest',
-            id='var_stat',
+            id='var_well',
             style={'width': '48%'}
         ),
         dcc.Dropdown(
             placeholder='Choose Dose of Interest',
-            id='dose_stat',
+            id='dose_well',
             style={'width': '48%'}
         ),
         html.Div('Results from T-test of the two wells'),
@@ -39,7 +39,7 @@ layout = html.Div([
         ]),
 ])
 
-@callback(Output('cytokine_stat', 'options'), Input('cytokines', 'data'))
+@callback(Output('cytokine_well', 'options'), Input('cytokines', 'data'))
 def update_dropdown(df):
     cytokines = df[1:-1].split(', ')
     cytokines = [i[1:-1] for i in cytokines]
@@ -48,13 +48,13 @@ def update_dropdown(df):
 # @callback(Output('dose', 'options'), Input('doses', 'data'))
 # def update_dropdown(df):
 #     return df[1:-1].split(', ')
-@callback(Output('dose_stat', 'options'), Input('doses', 'data'))
+@callback(Output('dose_well', 'options'), Input('doses', 'data'))
 def update_dropdown(df):
     doses = df[1:-1].split(', ')
     doses = [eval(i[1:-1]) for i in doses]
     return sorted(doses)
 
-@callback(Output('var_stat', 'options'), Input('df-columns', 'data'))
+@callback(Output('var_well', 'options'), Input('df-columns', 'data'))
 def update_dropdown(df):
     vars = df[1:-1].split(', ')
     vars = [i[1:-1] for i in vars]
@@ -92,9 +92,9 @@ def update_dropdown(df):
 @callback(
     Output('graph_well', 'figure'), 
     Output('well-ttest-table', 'data'),
-    Input('cytokine_stat', 'value'), 
-    Input('dose_stat', 'value'), 
-    Input('var_stat', 'value'), 
+    Input('cytokine_well', 'value'), 
+    Input('dose_well', 'value'), 
+    Input('var_well', 'value'), 
     State('dfs', 'data'),
     prevent_initial_call=True
     )
@@ -107,8 +107,5 @@ def update_graph3_box(c, d, y, dfs):
         data = data[data['Metadata_Metadata_Dose']==d]
     fig = generate_box(data, 'Metadata_Well', y)
     text_df = get_ttest_wells_d(c, d, y, data)
-    # text_df = text_df.to_dict('records')
+    
     return fig, text_df.to_dict('records')
-
-    # OSError: [WinError 10038]
-    # fig = plot_by_wells_d(c, d, y, data)
