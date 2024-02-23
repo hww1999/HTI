@@ -46,11 +46,18 @@ layout = html.Div([
         ]),
 ])
 
-@callback(Output('var_dose', 'options'), Input('df-columns', 'data'))
+@callback(Output('cytokine_stat', 'options'), Input('df-columns', 'data'))
 def update_dropdown(df):
     vars = df[1:-1].split(', ')
     vars = [i[1:-1] for i in vars]
     return sorted(vars)
+
+@callback(Output('var_stat', 'options'), Input('df-columns', 'data'))
+def update_dropdown(df):
+    vars = df[1:-1].split(', ')
+    vars = [i[1:-1] for i in vars]
+    return sorted(vars)
+
 
 @callback(
     Output('graph5', 'figure'), 
