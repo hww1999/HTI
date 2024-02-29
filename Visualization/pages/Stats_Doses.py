@@ -15,20 +15,14 @@ layout = html.Div([
     html.H1('Statstical Analysis between Doses for a given Cytokine'),
     html.Div('This is our visualization for statstical analysis between doses '),
     html.Div([
-        # only untr for plates
-        # dcc.Dropdown(
-        #     placeholder='Select Cytokine of Interest',
-        #     id='cytokine_stat',
-        #     style={'width': '48%'}
-        # ),
         dcc.Dropdown(
             placeholder='Select Cytokine of Interest',
-            id='cytokine_stat',
+            id='cyto_dose',
             style={'width': '48%'}
         ),
         dcc.Dropdown(
             placeholder='Select Variable of Interest',
-            id='var_stat',
+            id='var_dose',
             style={'width': '48%'}
         ),
         html.Br(),
@@ -46,13 +40,13 @@ layout = html.Div([
         ]),
 ])
 
-@callback(Output('cytokine_stat', 'options'), Input('df-columns', 'data'))
+@callback(Output('cyto_dose', 'options'), Input('cytokines', 'data'))
 def update_dropdown(df):
     vars = df[1:-1].split(', ')
     vars = [i[1:-1] for i in vars]
     return sorted(vars)
 
-@callback(Output('var_stat', 'options'), Input('df-columns', 'data'))
+@callback(Output('var_dose', 'options'), Input('df-columns', 'data'))
 def update_dropdown(df):
     vars = df[1:-1].split(', ')
     vars = [i[1:-1] for i in vars]
@@ -63,10 +57,9 @@ def update_dropdown(df):
     Output('graph5', 'figure'), 
     Output('dose-anova-table', 'data'),
     Output('dose-tukey-table', 'data'),
-    # Input('cytokine_stat', 'value'), 
-    Input('cytokine_stat', 'value'), 
-    Input('var_stat', 'value'), 
-    State('dfs', 'data'),
+    Input('cyto_dose', 'value'), 
+    Input('var_dose', 'value'), 
+    Input('dfs', 'data'),
     prevent_initial_call=True
     )
 def update_graph4_box(c, y, dfs):
@@ -76,6 +69,12 @@ def update_graph4_box(c, y, dfs):
         data = pd.read_json(v, orient='split')
     anova_df = run_ANOVA_doses(c, y, data)
     tukey_df = doses_Tukey_HSD(c, y, data)
+    data = data[data['Metadata_Metadata_Cytokine']==c]
     fig = generate_box(data, 'Metadata_Metadata_Dose', y)
+    # tukey_df = tukey_df.summary()
+    # tukey_df = pd.DataFrame.from_records(tukey_df.data)
+    # new_header = tukey_df.iloc[0] #grab the first row for the header
+    # tukey_df = tukey_df[1:] #take the data less the header row
+    # tukey_df.columns = new_header
     
     return fig, anova_df[0].to_dict('records'), tukey_df.to_dict('records')

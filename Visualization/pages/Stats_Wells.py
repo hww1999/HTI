@@ -45,9 +45,6 @@ def update_dropdown(df):
     cytokines = [i[1:-1] for i in cytokines]
     return sorted(cytokines)
 
-# @callback(Output('dose', 'options'), Input('doses', 'data'))
-# def update_dropdown(df):
-#     return df[1:-1].split(', ')
 @callback(Output('dose_well', 'options'), Input('doses', 'data'))
 def update_dropdown(df):
     doses = df[1:-1].split(', ')
@@ -59,35 +56,6 @@ def update_dropdown(df):
     vars = df[1:-1].split(', ')
     vars = [i[1:-1] for i in vars]
     return sorted(vars)
-
-# @callback(
-#     Output('graph3', 'figure'), 
-#     Input('cytokine_stat', 'value'), 
-#     Input('dose_stat', 'value'), 
-#     Input('var_stat', 'value'), 
-#     State('dfs', 'data'),
-#     prevent_initial_call=True
-#     )
-# def update_graph3_violin(c, d, y, dfs):
-#     dfs = json.loads(dfs)
-
-#     for k, v in zip(dfs.keys(), dfs.values()):
-#         data = pd.read_json(v, orient='split')
-#         data = data[data['Metadata_Metadata_Cytokine']==c][data['Metadata_Metadata_Dose']==d]
-#         subdata = {}
-#         cd = data.groupby(by=['Metadata_Metadata_Cytokine', 
-#                             'Metadata_Metadata_Dose',
-#                             'Metadata_Well'])[y].mean().index
-        
-#         for i in cd:
-#             w = i[2]
-#             name = c + ' ' + str(d) + ' ' + w
-#             # curr = df[df['Metadata_Metadata_Cytokine']==c]
-#             # curr = data[data['Metadata_Metadata_Dose']==d]
-#             subdata[name] = data[data['Metadata_Well']==w][y]
-#         fig = generate_violins(subdata, y, sd=0)
-
-#     return fig
 
 @callback(
     Output('graph_well', 'figure'), 

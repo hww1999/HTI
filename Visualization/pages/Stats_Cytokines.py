@@ -15,20 +15,14 @@ layout = html.Div([
     html.H1('Statstical Analysis between Cytokines at a given dosage treatment'),
     html.Div('This is our visualization for statstical analysis between cytokines '),
     html.Div([
-        # only untr for plates
-        # dcc.Dropdown(
-        #     placeholder='Select Cytokine of Interest',
-        #     id='cytokine_stat',
-        #     style={'width': '48%'}
-        # ),
         dcc.Dropdown(
             placeholder='Select Variable of Interest',
-            id='var_stat',
+            id='var_cyto',
             style={'width': '48%'}
         ),
         dcc.Dropdown(
             placeholder='Select Dose of Interest',
-            id='dose_stat',
+            id='dose_cyto',
             style={'width': '48%'}
         ),
         html.Br(),
@@ -46,27 +40,25 @@ layout = html.Div([
         ]),
 ])
 
-@callback(Output('var_stat', 'options'), Input('df-columns', 'data'))
+@callback(Output('var_cyto', 'options'), Input('df-columns', 'data'))
 def update_dropdown(df):
     vars = df[1:-1].split(', ')
     vars = [i[1:-1] for i in vars]
     return sorted(vars)
 
-@callback(Output('dose_stat', 'options'), Input('df-columns', 'data'))
+@callback(Output('dose_cyto', 'options'), Input('doses', 'data'))
 def update_dropdown(df):
-    vars = df[1:-1].split(', ')
-    vars = [i[1:-1] for i in vars]
-    return sorted(vars)
+    doses = df[1:-1].split(', ')
+    doses = [eval(i[1:-1]) for i in doses]
+    return sorted(doses)
 
 @callback(
     Output('graph6', 'figure'), 
     Output('cytokine-anova-table', 'data'),
     Output('cytokine-tukey-table', 'data'),
-    # Input('cytokine_stat', 'value'), 
-    # Input('dose_stat', 'value'), 
-    Input('var_stat', 'value'),
-    Input('dose_stat', 'value'),
-    State('dfs', 'data'),
+    Input('dose_cyto', 'value'),
+    Input('var_cyto', 'value'),
+    Input('dfs', 'data'),
     prevent_initial_call=True
     )
 def update_graph4_box(d, y, dfs):
@@ -74,8 +66,10 @@ def update_graph4_box(d, y, dfs):
 
     for k, v in zip(dfs.keys(), dfs.values()):
         data = pd.read_json(v, orient='split')
-    anova_df = run_ANOVA_cytokines(d, y, data)
-    tukey_df = cytokine_Tukey_HSD(d, y, data)
+        print(data)
+        anova_df = run_ANOVA_cytokines(data, y, d)
+        tukey_df = cytokine_Tukey_HSD(data, y, d)
+        data = data[data['Metadata_Metadata_Dose']==d]
     fig = generate_box(data, 'Metadata_Metadata_Cytokine', y)
     
     return fig, anova_df[0].to_dict('records'), tukey_df.to_dict('records')
