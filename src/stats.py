@@ -60,7 +60,13 @@ def doses_Tukey_HSD(cytokine, feature, df):
                           groups=cytokine_doses['Metadata_Metadata_Dose'],
                           alpha=0.05)
     
-    return res
+    rs = res.summary()
+    rs = pd.DataFrame.from_records(rs.data) # change from rs = pd.DataFrame(rs)
+    new_header = rs.iloc[0] #grab the first row for the header
+    rs = rs[1:] #take the data less the header row
+    rs.columns = new_header #set the header row as the df header
+    
+    return rs
 
 def get_ttest_wells(cytokine, feature, df):
     ttest_df = pd.DataFrame(columns=['Cytokine', 'Feature', 'Well Comparison', 'T-Statistic', 'p-value', 'Power'])
