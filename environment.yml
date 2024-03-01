@@ -10,4 +10,5 @@ dependencies:
   - scikit-learn
   - dash
   - statsmodels
+  - scipy
 prefix: /root/miniconda3/envs/Capstone
