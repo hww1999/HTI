@@ -54,7 +54,7 @@ To build an open-source interactive dashboard, we decided to use open-source too
 ## Installation 
 
 ```bash
-git clone 
+git clone git@github.com:hww1999/HTI.git
 conda create --name image_analysis python=3.10
 conda activate image_analysis
 pip install requirements.txt
