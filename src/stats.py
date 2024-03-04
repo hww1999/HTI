@@ -11,6 +11,22 @@ from statsmodels.stats.power import TTestPower
 from scipy.stats import f_oneway
 
 def run_ANOVA_doses(cytokine, feature, df):
+    '''
+    This function run ANOVA test across dosage levels of a cytokine
+    with a feature that we are interested in
+    
+    Arguments:
+
+    - cytokine: the cytokine we are interested in
+    - feature: the feature we are interested in
+    - df: the Pandas DataFrame that stores all the data
+    
+    Returns: 
+    
+    - final_df: a Pandas DataFrame containing the cytokine and feature of interest, 
+    F-stat and P-value of the ANOVA test
+    - anova_power: the power of the test
+    '''
     # Dropping the Dose and Well columns
     df_doses = df.drop(['Metadata_Plate', 'Metadata_Well'], axis=1)
     final_df = pd.DataFrame(columns=['Cytokine', 'Feature', 'F-stat', 'P-value'])
@@ -34,6 +50,16 @@ def run_ANOVA_doses(cytokine, feature, df):
     return final_df,anova_power
 
 def plot_by_dose(cytokine, feature, df):
+    '''
+    This function produces box-plots of the feature of interest using the cytokine 
+    of interest grouped by dosage levels 
+    
+    Arguments:
+
+    - cytokine: the cytokine that we are interested in
+    - feature: the feature that we are interested in
+    - df: the Pandas DataFrame that stores all the data
+    '''
     cytokine_dose = df[(df['Metadata_Metadata_Cytokine'] == cytokine)]
     cytokine_dose = cytokine_dose[['Metadata_Metadata_Dose', feature]]
     grouped = cytokine_dose.groupby('Metadata_Metadata_Dose')[feature]
@@ -53,6 +79,20 @@ def plot_by_dose(cytokine, feature, df):
         box.set_facecolor(color)
 
 def doses_Tukey_HSD(cytokine, feature, df):
+    '''
+    This function run Tukey test across dosage levels of a cytokine
+    with a feature that we are interested in
+    
+    Arguments:
+
+    - cytokine: the cytokine we are interested in
+    - feature: the feature we are interested in
+    - df: the Pandas DataFrame that stores all the data
+    
+    Returns: 
+    
+    - rs: a Pandas DataFrame containing the results of the test 
+    '''
     cytokine_doses = df[(df['Metadata_Metadata_Cytokine'] == cytokine)]
     cytokine_doses = cytokine_doses[['Metadata_Metadata_Dose', feature]]
     
@@ -69,6 +109,22 @@ def doses_Tukey_HSD(cytokine, feature, df):
     return rs
 
 def get_ttest_wells(cytokine, feature, df):
+    '''
+    This function runs t-test across different wells with the feature 
+    and the cytokine of interest at the dosage level of 100
+    
+    Arguments:
+
+    - cytokine: the cytokine that we are interested in
+    - feature: the feature that we are interested in
+    - df: the Pandas DataFrame that stores all the data
+    
+    Returns: 
+    
+    - final_df: a Pandas DataFrame containing the cytokine and feature of interest, 
+    Well Comparison that specifies the wells in the test, T-Statistic, P-value and Power
+    of the t-test
+    '''
     ttest_df = pd.DataFrame(columns=['Cytokine', 'Feature', 'Well Comparison', 'T-Statistic', 'p-value', 'Power'])
     cytokine_wells = df[(df['Metadata_Metadata_Dose'] == 100) & (df['Metadata_Metadata_Cytokine'] == cytokine)]
     obs = len(cytokine_wells)
@@ -94,6 +150,23 @@ def get_ttest_wells(cytokine, feature, df):
     return ttest_df
 
 def get_ttest_wells_d(cytokine, dose, feature, df):
+    '''
+    This function runs t-test across different wells with the feature 
+    and the cytokine of interest at the dosage level of interest
+    
+    Arguments:
+
+    - cytokine: the cytokine that we are interested in
+    - dose: the dosage level that we are interested in
+    - feature: the feature that we are interested in
+    - df: the Pandas DataFrame that stores all the data
+    
+    Returns: 
+    
+    - final_df: a Pandas DataFrame containing the cytokine and feature of interest, 
+    Well Comparison that specifies the wells in the test, T-Statistic, P-value and Power
+    of the t-test
+    '''
     ttest_df = pd.DataFrame(columns=['Cytokine', 'Feature', 'Well Comparison', 'T-Statistic', 'p-value', 'Power'])
     # is it okay if we generalize the Metadata_Metadata_Dose to input by users
     cytokine_wells = df[(df['Metadata_Metadata_Dose'] == dose) & (df['Metadata_Metadata_Cytokine'] == cytokine)]
@@ -120,6 +193,16 @@ def get_ttest_wells_d(cytokine, dose, feature, df):
     return ttest_df
 
 def plot_by_wells(cytokine, feature, df):
+    '''
+    This function produces box-plots of the feature of interest in
+    different wells using the cytokine of interest at the dosage level of 100
+    
+    Arguments:
+
+    - cytokine: the cytokine that we are interested in
+    - feature: the feature that we are interested in
+    - df: the Pandas DataFrame that stores all the data
+    '''
     cytokine_wells = df[(df['Metadata_Metadata_Dose'] == 100) & (df['Metadata_Metadata_Cytokine'] == cytokine)]
     cytokine_wells = cytokine_wells[['Metadata_Well', feature]]
     grouped = cytokine_wells.groupby('Metadata_Well')[feature]
@@ -143,6 +226,22 @@ def plot_by_wells(cytokine, feature, df):
     ax.set_xlabel('Wells')
 
 def run_ANOVA_plates(untr, feature, df):
+    '''
+    This function run ANOVA test across plates using untreated experiments
+    with a feature that we are interested in
+    
+    Arguments:
+
+    - untr: specifies the untreated experiments
+    - feature: the feature we are interested in
+    - df: the Pandas DataFrame that stores all the data
+    
+    Returns: 
+    
+    - final_df: a Pandas DataFrame containing the cytokine and feature of interest, 
+    F-stat and P-value of the ANOVA test
+    - anova_power: the power of the test
+    '''
     # Dropping the Dose and Well columns
     df_doses = df.drop(['Metadata_Metadata_Dose', 'Metadata_Well'], axis=1)
     final_df = pd.DataFrame(columns=['Cytokine', 'Feature', 'F-stat', 'P-value'])
@@ -166,6 +265,16 @@ def run_ANOVA_plates(untr, feature, df):
     return final_df,anova_power
 
 def plot_by_plate(untr, feature, df):
+    '''
+    This function produces box-plots of the feature of interest in
+    different plates using untreated experiments
+    
+    Arguments:
+
+    - df: the Pandas DataFrame that stores all the data
+    - feature: the feature that we are interested in
+    - dose: the dosage level that we are interested in
+    '''
     cytokine_plate = df[(df['Metadata_Metadata_Cytokine'] == untr)]
     cytokine_plate = cytokine_plate[['Metadata_Plate', feature]]
     grouped = cytokine_plate.groupby('Metadata_Plate')[feature]
@@ -185,6 +294,20 @@ def plot_by_plate(untr, feature, df):
         box.set_facecolor(color)
 
 def plate_Tukey_HSD(untr, feature, df):
+    '''
+    This function run Tukey test across plates using untreated experiments
+    with a feature that we are interested in
+    
+    Arguments:
+
+    - untr: specifies the untreated experiments
+    - feature: the feature that we are interested in
+    - df: the Pandas DataFrame that stores all the data
+    
+    Returns: 
+    
+    - rs: a Pandas DataFrame containing the results of the Tukey test 
+    '''
     untr_plates = df[(df['Metadata_Metadata_Cytokine'] == untr)]
     untr_plates = untr_plates[['Metadata_Plate', feature]]
     # should we change from groups=untr_plates['Metadata_Metadata_Dose']
@@ -202,6 +325,22 @@ def plate_Tukey_HSD(untr, feature, df):
     return rs
 
 def run_ANOVA_cytokines(df, feature, dose):
+    '''
+    This function run ANOVA test across different cytokines
+    at the dosage level of interest with a feature that we are interested in
+    
+    Arguments:
+
+    - df: the Pandas DataFrame that stores all the data
+    - feature: the feature that we are interested in
+    - dose: the dosage level that we are interested in
+    
+    Returns: 
+    
+    - final_df: a Pandas DataFrame containing the cytokine and feature of interest, 
+    F-stat and P-value of the ANOVA test
+    - anova_power: the power of the test
+    '''
     sub_df = df[df['Metadata_Metadata_Dose'] == dose]
     
     # We're only looking at our treated cells, so filter out the untreated cells
@@ -229,6 +368,16 @@ def run_ANOVA_cytokines(df, feature, dose):
     return final_df,anova_power
 
 def plot_by_dose(df, feature, dose):
+    '''
+    This function produces box-plots of the feature of interest group by 
+    different cytokines at the dosage level of interest
+    
+    Arguments:
+
+    - df: the Pandas DataFrame that stores all the data
+    - feature: the feature that we are interested in
+    - dose: the dosage level that we are interested in
+    '''
     cytokine_dose = df[(df['Metadata_Metadata_Dose'] == dose)]
     cytokine_dose = cytokine_dose[['Metadata_Metadata_Cytokine', feature]]
     grouped = cytokine_dose.groupby('Metadata_Metadata_Cytokine')[feature]
@@ -252,7 +401,20 @@ def plot_by_dose(df, feature, dose):
     ax.set_xlabel('Cytokines')
 
 def cytokine_Tukey_HSD(df, feature, dose):
+    '''
+    This function run Tukey test across different cytokines
+    at the dosage level of interest with the feature of interest
     
+    Arguments:
+
+    - df: the Pandas DataFrame that stores all the data
+    - feature: the feature that we are interested in
+    - dose: the dosage level that we are interested in
+    
+    Returns: 
+    
+    - rs: a Pandas DataFrame containing the results of the Tukey test 
+    '''
     # We're only looking at our treated cells, so filter out the untreated cells
     sub_df = df[(df['Metadata_Metadata_Cytokine'] != 'untr') & (df['Metadata_Metadata_Cytokine'] != 'untr-50')]
     
