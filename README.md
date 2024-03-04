@@ -50,6 +50,16 @@ To build an open-source interactive dashboard, we decided to use open-source too
 4. Violin plots to show distributions of experiment outcomes
 5. Dendrogram to show the clustering of parameters and to disclose underlying patterns
 
+
+## Installation 
+
+```bash
+git clone 
+conda create --name image_analysis python=3.10
+conda activate image_analysis
+pip install requirements.txt
+```
+
 ## Conclusion
 
 
