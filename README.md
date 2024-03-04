@@ -60,6 +60,8 @@ conda activate image_analysis
 pip install requirements.txt
 ```
 
+For more details on downloading and setting up conda environment you can visit [conda](https://docs.anaconda.com/free/miniconda/index.html)
+
 ## Conclusion
 
 
