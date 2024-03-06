@@ -38,7 +38,7 @@ The dimensionality reduction is done in two parts. In the first part principal c
 
 **Statistical Tests**
 1. To identify that difference in values does not occur because of differences in wells and plates, t-test is performed between wells with experiments of the same cytokine at the same dosage level and ANOVA AND TUKEY are performed between plates with untreated experiments. This provides confirmation that tests performed are valid or maybe can give guidelines for future improvements (The visualization for this part can be found in the dashboard)
-2. To test that if a feature has a shared effect on a set of cytokines on a given plate and at a given dosage treatment (@Matthew Review w/team)*
+2. To test that if a feature has a shared effect on a set of cytokines on a given plate and at a given dosage treatment. This is to provide initial insight as to if there are sets of cytokines that have a shared MOA for a given feature. (@Matthew Review w/team)*
 3. To test that if, with a specific cytokine, different dosage levels are having a statistically significant effect on a specific feature, we have conducted the one way ANOVA test and tukey 
 
 **Dashboard**
