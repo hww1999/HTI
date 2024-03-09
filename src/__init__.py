@@ -1,2 +1,1 @@
-from . import heatmaps
-from . import violinPlots
+from .heatmaps import corr_heatmap_generator

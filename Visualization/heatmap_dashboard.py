@@ -11,10 +11,26 @@ import io
 from io import StringIO
 import json
 import sys
+import os
 
+print(os.getcwd())
 # Custom Functions
-sys.path.append('/home/logan/MSDS/Capstone/HTI/src')
-from heatmaps import corr_heatmap_generator
+#sys.path.append('/Users/apple/Desktop/DATA_590/HTI/src')
+#from src.heatmaps import corr_heatmap_generator
+#from heatmaps import corr_heatmap_generator
+
+
+#current_dir = os.path.dirname(__file__)
+#parent_dir = os.path.join(current_dir, '..')
+#sys.path.append(parent_dir)
+#from src.heatmaps import corr_heatmap_generator
+#print(parent_dir)
+
+# This assumes the script is run from within the Visualization directory
+project_dir = os.path.dirname(os.path.dirname(__file__))  # This navigates up twice to get to HTI
+sys.path.append(project_dir)
+#from src.heatmaps import corr_heatmap_generator
+import src 
 
 def parse_contents(contents, filename):
     _, content_string = contents.split(',')
@@ -157,7 +173,7 @@ def update_heatmap(data, cytokine_column_dropdown_value, cytokine_of_interest_dr
     #convert to dataFrame
     df_data = pd.read_json(json.loads(data))
     
-    return corr_heatmap_generator(df=df_data, name_of_cytokine_column=cytokine_column_dropdown_value,
+    return src.corr_heatmap_generator(df=df_data, name_of_cytokine_column=cytokine_column_dropdown_value,
                              cytokine_of_interest=cytokine_of_interest_dropdown_value,
                              columns_of_interest_for_heatmap=columns_of_interest_dropdown_value)
 
