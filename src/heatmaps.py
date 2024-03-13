@@ -42,7 +42,7 @@ def corr_heatmap_generator(df, groupby_cols = ['ImageNumber','Metadata_Metadata_
     selected_columns = df.filter(regex=f'^{columns_of_interest_for_heatmap}_', axis=1).columns.tolist()
     
     # Append dose to selected columns 
-    selected_columns.append('Metadata_Metadata_Dose')
+    # selected_columns.append('Metadata_Metadata_Dose')
     
     # Calculate the correlation matrix
     corr_matrix = df[selected_columns].corr()
