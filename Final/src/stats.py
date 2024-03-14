@@ -149,7 +149,7 @@ def get_ttest_wells(cytokine, feature, df):
     df = pd.DataFrame([[cytokine, feature, well_comp, Tstat, Pvalue, ttest_power]], columns=ttest_df.columns)
     
     ttest_df = pd.concat([ttest_df, df])
-    return result
+    return ttest_df
 
 def get_ttest_wells_d(cytokine, dose, feature, df):
     '''
