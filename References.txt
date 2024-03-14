@@ -23,6 +23,7 @@ Miscellaneous:
 - https://stackoverflow.com/questions/739993/how-do-i-get-a-list-of-locally-installed-python-modules
 - https://stackoverflow.com/questions/48787250/set-up-virtualenv-using-a-requirements-txt-generated-by-conda
 - https://stackoverflow.com/questions/4114095/how-do-i-revert-a-git-repository-to-a-previous-commit
+- https://stackoverflow.com/questions/33491513/managing-requirements-in-ipython-notebook
 
 
 ML Methods:
