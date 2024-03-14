@@ -7,4 +7,4 @@ seaborn==0.12.2
 plotly==5.18.0
 dash==2.14.2
 nbClassic
-jupyter notebook 
+Jupyter
