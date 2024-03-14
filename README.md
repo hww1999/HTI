@@ -5,6 +5,29 @@ types and doses of cytokines.
 
 ![poster](https://github.com/hww1999/HTI/blob/main/Poster.pptx.png)
 
+## Installation 
+
+```bash
+git clone git@github.com:hww1999/HTI.git
+conda create --name image_analysis python=3.9.18
+conda activate image_analysis
+pip install -r requirements.txt
+```
+
+For more details on downloading and setting up conda environment you can visit [conda](https://docs.anaconda.com/free/miniconda/index.html)
+
+## How to Run 
+
+All the source code can be found here[src](https://github.com/hww1999/HTI/tree/main/Final/src)
+
+Jupyter Notebooks 
+
+| Purpose | Notebook |
+|---------|----------|
+|Data Cleaning| [cleaning](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/01.%20data_cleaning.ipynb)|
+|Principal Component Analysis| [PCA](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/02.%20pca_1.ipynb)|
+|Corr Filtering| [filtering](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/03.%20corr_filtering.ipynb)|
+
 ## Background
 
 **The Role of Skin in Immune-Defense**: 
@@ -55,17 +78,6 @@ To build an open-source interactive dashboard, we decided to use open-source too
 4. Violin plots to show distributions of experiment outcomes
 5. Dendrogram to show the clustering of parameters and to disclose underlying patterns
 
-
-## Installation 
-
-```bash
-git clone git@github.com:hww1999/HTI.git
-conda create --name image_analysis python=3.9.18
-conda activate image_analysis
-pip install -r requirements.txt
-```
-
-For more details on downloading and setting up conda environment you can visit [conda](https://docs.anaconda.com/free/miniconda/index.html)
 
 ## Conclusion
 
