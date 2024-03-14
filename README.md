@@ -18,15 +18,18 @@ For more details on downloading and setting up conda environment you can visit [
 
 ## How to Run 
 
-All the source code can be found here[src](https://github.com/hww1999/HTI/tree/main/Final/src)
+All the source code can be found here [src](https://github.com/hww1999/HTI/tree/main/Final/src)
 
+<div align="center">
 Jupyter Notebooks 
 
 | Purpose | Notebook |
 |---------|----------|
-|Data Cleaning| [cleaning](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/01.%20data_cleaning.ipynb)|
+|Data Cleaning| [Cleaning](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/01.%20data_cleaning.ipynb)|
 |Principal Component Analysis| [PCA](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/02.%20pca_1.ipynb)|
-|Corr Filtering| [filtering](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/03.%20corr_filtering.ipynb)|
+|Corr Filtering| [Filtering](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/03.%20corr_filtering.ipynb)|
+
+</div>
 
 ## Background
 
