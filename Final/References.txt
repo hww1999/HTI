@@ -20,7 +20,9 @@ Miscellaneous:
 - https://www.researchgate.net/post/Do_we_need_to_standardize_variables_with_different_scales_before_doing_correlation_analysis
 - https://www.researchgate.net/post/Cross_and_Pearson_correlation_coefficient#:~:text=It%20is%20true%20that%20Pearson,data%20are%20to%20be%20normalized
 - https://stats.stackexchange.com/questions/423291/should-i-use-normalized-data-for-correlation-calculation-or-not#:~:text=Since%20the%20formula%20for%20calculating,will%20NOT%20affect%20the%20correlation
-
+- https://stackoverflow.com/questions/739993/how-do-i-get-a-list-of-locally-installed-python-modules
+- https://stackoverflow.com/questions/48787250/set-up-virtualenv-using-a-requirements-txt-generated-by-conda
+- https://stackoverflow.com/questions/4114095/how-do-i-revert-a-git-repository-to-a-previous-commit
 
 
 ML Methods:
