@@ -18,8 +18,6 @@ def replace_NA(data):
         if data[measure].isna().any():
             data[measure].fillna(data[measure].mean(), inplace=True)
             
-# Decide with team whether we have a consistent threshold/SD or leave it to user
-            
 def replace_outliers_with_sd(df, feature, c, d, w, n):
     sub_df= df[df['Metadata_Metadata_Cytokine']==c]
     sub_df = sub_df[sub_df['Metadata_Metadata_Dose']==d]
@@ -30,11 +28,16 @@ def replace_outliers_with_sd(df, feature, c, d, w, n):
     bool_col = (sub_df < (m - n * sd)) | (sub_df > (m + n * sd))
     return bool_col
 
-def outlier_detection(df, sd, thresh):
+def outlier_detection(df, sd, thresh=0.2):
     df_copy = df.copy()
     features = df_copy.columns[6:]
 
-    threshold = round(thresh * len(features))
+    if(thresh == 0):
+        threshold = 1 
+    elif(len(features) <= 5):
+        threshold = 1
+    else:
+        threshold = round(thresh * len(features))
 
     # Preferable to groupby as this maintains the unique combination of cytokine, dose, and well in the same 
     # order as they appear in the original dataframe
@@ -81,5 +84,3 @@ def outlier_detection(df, sd, thresh):
     # I'm only returning the outliers for the team to show our sponsors which images are outliers. 
     # We can remove this part of the function in our final product. 
     return outliers, sub_data
-
-
