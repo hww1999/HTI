@@ -90,6 +90,7 @@ To build an open-source interactive dashboard, we decided to use open-source too
 We conducted a variety of statistical tests and learned:
 1. For keratinocytes, we observed that untreated cells that were placed on three separate plates within the same experiment were significantly different for most features. This suggests that there may be an outside factor, such as contamination, that may be driving these differences.
 2. For keratinocytes, we observed that cells treated with cytokine IL26 at 100 ng/mL had significantly different mean values for the granularity-related features compared to cells treated with the same cytokine at 11 ng/mL, implying that IL26 may be involved in strong immune responses to damages in keratinocytes’ granularity features.
+
 We examined similarities between cytokine treatments and identified distinct clusters, which in the examined case, aligned with what investigators saw in the lab. Additionally, we identified the distinguishing features for a couple treatments (vs untreated)
 
 ## Future Work
