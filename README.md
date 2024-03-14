@@ -22,7 +22,7 @@ All the source code can be found here [src](https://github.com/hww1999/HTI/tree/
 
 <div align="center">
 
-**Jupyter Notebooks** 
+**Important Files** 
 
 
 | Purpose | File |
@@ -31,6 +31,7 @@ All the source code can be found here [src](https://github.com/hww1999/HTI/tree/
 |Principal Component Analysis| [PCA](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/02.%20pca_1.ipynb)|
 |Corr Filtering| [Filtering](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/03.%20corr_filtering.ipynb)|
 |Visualisation| [Dashboard](https://github.com/hww1999/HTI/blob/main/Final/Dashboard/app.py)|
+|Statistical Analysis| [Analysis](https://github.com/hww1999/HTI/blob/main/Final/Jupyter%20Notebooks/04.%20statistical%20analyses.ipynb)
 
 </div>
 
