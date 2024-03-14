@@ -37,17 +37,16 @@ All the source code can be found here [src](https://github.com/hww1999/HTI/tree/
 ## Background
 
 **The Role of Skin in Immune-Defense**: 
-While often overlooked, the skin plays an important role in immune defense. It aids in protecting the individual from infection, UV radiation, and irritants. 
-The skin also interacts with immune cells and contains about 2x as many T cells as the blood (T-cells are a type of white blood cell that help to fight infection [1]). CD4 T-cells, secrete cytokines, a type of chemical signal, to “coordinate inflammatory responses” in the skin and immune cells [2]. 
+While often overlooked, the skin plays an important role in immune defense. It aids in protecting the individual from infection, UV radiation, and irritants. The skin also interacts with immune cells and contains about twice as many T-cells as blood cells (T-cells are “a type of white blood cell” that help to fight infection [1]). CD4 T-cells secrete cytokines, a type of chemical signal, to “coordinate inflammatory responses” in the skin and immune cells [2]. 
 
 **The Goal**:
 By studying the potential effects of cytokines on skin cells, researchers hope to derive insights that lead to advancements in the field of human immunology research. 
 
 **The Process**:
-Researchers at Benaroya Research Institute (BRI) conducted a series of experiments to treat two skin cell types (keratinocytes and fibroblasts) with a variety of cytokines at different dosage levels. Then, they utilized high content imaging to capture various cell feature measurements and segmented the images into several regions of interest of the cells. By comparing the images for different treatments and cell regions, the researchers hope to identify insight into what impact cytokines have on the cells.
+Researchers at the Benaroya Research Institute (BRI) conducted a series of experiments to treat two skin cell types (keratinocytes and fibroblasts) with a variety of cytokines at different doses. Then, they used high-content imaging to stain various cell components such as the nucleus, cytoskeleton, mitochondria. These images are (A) segmented into several regions of interest and then (B) measured for morphological changes for each staining. By comparing the images for different treatments and cell regions, the researchers hope to identify insight into what impact cytokines have on the cells.
 
 **The Problem**: 
-A challenge when performing analyses on cell-imagery data, stems from the sheer volume of the data. In the process described above, the researchers conducted 8 experiments. A single experiment resulted in 408 images, where each image contained hundreds of cells/cell objects. In turn, for each cell object, various measurements were recorded, up to 157 corresponding variables. Thus, the question is, how do you identify patterns in these measurements, given this scale?
+A challenge when performing analyses on cell-imaging data stems from the sheer volume of the data. In the process described above, the researchers conducted 8 experiments. One of the experiments resulted in 408 images, where each image contained up to hundreds of cellular objects. For each cellular object, various measurements were recorded, resulting in 157 corresponding features for each object. Thus, the question is, how do you identify patterns in these measurements, given this scale?
 
 
 ## Pipeline
@@ -106,8 +105,12 @@ We would like to thank Benaroya Research Institute for sponsoring our project, a
 Additionally, we are grateful for the guidance and support of our professor, Dr. Megan Hazen, throughout the capstone project.
 
 ## Reference
-1. Caicedo, J., Cooper, S., Heigwer, F. et al. Data-analysis strategies for image-based cell profiling. Nat Methods 14, 849–863 (2017). https://doi.org/10.1038/nmeth.4397
-2. Garcia-Fossa, F., Cruz, M. C., Haghighi, M., de Jesus, M. B., Singh, S., Carpenter, A. E., & Cimini, B. A. (2023). Interpreting image-based profiles using similarity clustering and single-cell visualization. Current Protocols, 3, e713. doi: 10.1002/cpz1.713
+[1]. https://www.cancer.gov/publications/dictionaries/cancer-terms/def/t-cell
 
+[2]. The sponsors provided details on cell biology and provided cell imagery throughout the poster
+
+[3]. Caicedo, J., Cooper, S., Heigwer, F. et al. Data-analysis strategies for image-based cell profiling. Nat Methods 14, 849–863 (2017). https://doi.org/10.1038/nmeth.4397
+
+[4]. Garcia-Fossa, F., Cruz, M. C., Haghighi, M., de Jesus, M. B., Singh, S., Carpenter, A. E., & Cimini, B. A. (2023). Interpreting image-based profiles using similarity clustering and single-cell visualization. Current Protocols, 3, e713. doi: 10.1002/cpz1.713
 
 
