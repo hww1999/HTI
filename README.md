@@ -1,4 +1,9 @@
-# HTI
+# High Throughput Imaging 
+
+The aim of this project is to assist in understanding the morphology for keratinocytes and fibroblasts (cells found within the skin) when treated with different 
+types and doses of cytokines. 
+
+[!poster](https://github.com/hww1999/HTI/blob/main/Poster.pptx.png)
 
 ## Background
 
