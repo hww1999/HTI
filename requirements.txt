@@ -1,9 +1,9 @@
-numpy
-pandas
+numpy==1.21.0
+pandas==1.3.0
 scikit-learn
-scipy
-statsmodels
-seaborn
-plotly
-dash
+scipy==1.7.0
+statsmodels==0.13.5
+seaborn==0.12.2
+plotly==5.18.0
+dash==2.14.2
 nbClassic
