@@ -55,9 +55,9 @@ To build an open-source interactive dashboard, we decided to use open-source too
 
 ```bash
 git clone git@github.com:hww1999/HTI.git
-conda create --name image_analysis python=3.10
+conda create --name image_analysis python=3.9.18
 conda activate image_analysis
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 For more details on downloading and setting up conda environment you can visit [conda](https://docs.anaconda.com/free/miniconda/index.html)
