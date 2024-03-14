@@ -1,0 +1,34 @@
+The following is a list of miscellaneous resources consulted during this project:
+
+Key References:
+- https://www.nature.com/articles/nmeth.4397
+
+Miscellaneous:
+- https://www.nature.com/articles/nmeth.4397
+- https://pubmed.ncbi.nlm.nih.gov/27434125/
+- https://pubmed.ncbi.nlm.nih.gov/24312513/
+- https://stackoverflow.com/questions/13148429/how-to-change-the-order-of-dataframe-columns
+- https://en.wikipedia.org/wiki/Dimensionality_reduction
+- https://stats.stackexchange.com/questions/220724/can-i-test-for-correlation-between-variables-before-standardize-them
+- https://stackoverflow.com/questions/30253976/pickling-pandas-dataframe-multiplies-by-5-the-file-size
+- https://stackoverflow.com/questions/49370591/what-are-the-advantages-of-pkl-file-over-txt-or-csv-file-in-python
+- https://stackoverflow.com/questions/2259270/pickle-or-json
+- https://stackoverflow.com/questions/21104592/json-to-pandas-dataframe
+- https://stackoverflow.com/questions/17839973/constructing-pandas-dataframe-from-values-in-variables-gives-valueerror-if-usi
+- https://stackoverflow.com/questions/57631895/dictionary-to-dataframe-error-if-using-all-scalar-values-you-must-pass-an-ind
+- https://stackoverflow.com/questions/45837031/is-there-a-better-way-to-perform-multiple-output-with-dash-by-plotly
+- https://www.researchgate.net/post/Do_we_need_to_standardize_variables_with_different_scales_before_doing_correlation_analysis
+- https://www.researchgate.net/post/Cross_and_Pearson_correlation_coefficient#:~:text=It%20is%20true%20that%20Pearson,data%20are%20to%20be%20normalized
+- https://stats.stackexchange.com/questions/423291/should-i-use-normalized-data-for-correlation-calculation-or-not#:~:text=Since%20the%20formula%20for%20calculating,will%20NOT%20affect%20the%20correlation
+
+
+
+ML Methods:
+- https://towardsdatascience.com/the-5-clustering-algorithms-data-scientists-need-to-know-a36d136ef68
+- https://www.nature.com/articles/s42003-023-05480-z
+- https://scikit-learn.org/stable/modules/unsupervised_reduction.html#data-reduction
+- https://www.ibm.com/topics/unsupervised-learning
+- https://www.datanovia.com/en/lessons/agglomerative-hierarchical-clustering/
+
+Visualization/Dashboard:
+- https://community.plotly.com/t/how-do-i-remove-legend-trace-from-subplot/59911
