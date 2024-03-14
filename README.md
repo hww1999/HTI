@@ -49,8 +49,6 @@ Researchers at Benaroya Research Institute (BRI) conducted a series of experimen
 **The Problem**: 
 A challenge when performing analyses on cell-imagery data, stems from the sheer volume of the data. In the process described above, the researchers conducted 8 experiments. A single experiment resulted in 408 images, where each image contained hundreds of cells/cell objects. In turn, for each cell object, various measurements were recorded, up to 157 corresponding variables. Thus, the question is, how do you identify patterns in these measurements, given this scale?
 
-**Solution Approach**:
-TBD: talk about how we employed techniques common in this area of research. Then outline solution pipeline. 
 
 ## Pipeline
 
