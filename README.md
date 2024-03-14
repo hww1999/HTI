@@ -87,7 +87,28 @@ To build an open-source interactive dashboard, we decided to use open-source too
 
 ## Conclusion
 
+We conducted a variety of statistical tests and learned:
+1. For keratinocytes, we observed that untreated cells that were placed on three separate plates within the same experiment were significantly different for most features. This suggests that there may be an outside factor, such as contamination, that may be driving these differences.
+2. For keratinocytes, we observed that cells treated with cytokine IL26 at 100 ng/mL had significantly different mean values for the granularity-related features compared to cells treated with the same cytokine at 11 ng/mL, implying that IL26 may be involved in strong immune responses to damages in keratinocytes’ granularity features.
+We examined similarities between cytokine treatments and identified distinct clusters, which in the examined case, aligned with what investigators saw in the lab. Additionally, we identified the distinguishing features for a couple treatments (vs untreated)
 
 ## Future Work
+1. Further investigate which cytokines share a similar mode of action with specific cell features via clustering methods
+2. Perform analyses across experiments and compare results
+3. Investigate whether cytokines impact different kinds of cells (e.g. fibroblasts vs keratinocytes) in measurably different ways
+4. Explore methods for further reducing the number of features (e.g. self-organizing maps)
+
+## Acknowledgements
+
+We would like to thank Benaroya Research Institute for sponsoring our project, and would particularly express our gratitude to the following individuals:
+- Dr. Caroline Stefani - BRI, Principal Investigator & Imaging Core Manager
+- Dr. Hannah DeBerg - BRI, Bioinformatics Group Manager
+
+Additionally, we are grateful for the guidance and support of our professor, Dr. Megan Hazen, throughout the capstone project.
+
+## Reference
+1. Caicedo, J., Cooper, S., Heigwer, F. et al. Data-analysis strategies for image-based cell profiling. Nat Methods 14, 849–863 (2017). https://doi.org/10.1038/nmeth.4397
+2. Garcia-Fossa, F., Cruz, M. C., Haghighi, M., de Jesus, M. B., Singh, S., Carpenter, A. E., & Cimini, B. A. (2023). Interpreting image-based profiles using similarity clustering and single-cell visualization. Current Protocols, 3, e713. doi: 10.1002/cpz1.713
+
 
 
