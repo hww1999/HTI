@@ -71,12 +71,13 @@ def plot_by_dose(cytokine, feature, df):
                          patch_artist=True,
                          medianprops={'color': 'black'}
                         )
-    # Define colors for each group
-    colors = ['orange', 'purple', '#69b3a2']
-
-    # Assign colors to each box in the boxplot
-    for box, color in zip(boxplot['boxes'], colors):
-        box.set_facecolor(color)
+        
+    # Add a title and axis label
+    ax.set_title('Dose Comparison: Mean Difference (' + cytokine + ' , ' + feature + ')')
+    ax.set_xlabel('Doses')
+    ax.set_ylabel('Mean Value (95% CI)')
+    
+    return fig
 
 def doses_Tukey_HSD(cytokine, feature, df):
     '''
@@ -145,9 +146,10 @@ def get_ttest_wells(cytokine, feature, df):
     Tstat = round(results[0],3)
     Pvalue = round(results[1],3)
     
-    ttest_df = ttest_df.append({'Cytokine' : cytokine, 'Feature': feature, 'Well Comparison': well_comp,
-                               'T-Statistic': Tstat, 'p-value': Pvalue, 'Power': ttest_power}, ignore_index=True)
-    return ttest_df
+    df = pd.DataFrame([[cytokine, feature, well_comp, Tstat, Pvalue, ttest_power]], columns=ttest_df.columns)
+    
+    ttest_df = pd.concat([ttest_df, df])
+    return result
 
 def get_ttest_wells_d(cytokine, dose, feature, df):
     '''
@@ -214,16 +216,12 @@ def plot_by_wells(cytokine, feature, df):
                          patch_artist=True,
                          medianprops={'color': 'black'}
                         )
-    # Define colors for each group
-    colors = ['orange', 'purple', '#69b3a2']
-
-    # Assign colors to each box in the boxplot
-    for box, color in zip(boxplot['boxes'], colors):
-        box.set_facecolor(color)
         
     # Add a title and axis label
     ax.set_title('Well Comparison: TMean Difference at 100 ng/ml ( ' + cytokine + ' , ' + feature + ' )')
     ax.set_xlabel('Wells')
+    ax.set_ylabel('Mean Value (95% CI)')
+    return fig
 
 def run_ANOVA_plates(untr, feature, df):
     '''
@@ -286,12 +284,11 @@ def plot_by_plate(untr, feature, df):
                          patch_artist=True,
                          medianprops={'color': 'black'}
                         )
-    # Define colors for each group
-    colors = ['orange', 'purple', '#69b3a2']
-
-    # Assign colors to each box in the boxplot
-    for box, color in zip(boxplot['boxes'], colors):
-        box.set_facecolor(color)
+    # Add a title and axis label
+    ax.set_title('Plate Comparison: Mean Differences for untreatd cells (' + feature + ')')
+    ax.set_xlabel('Plates')
+    ax.set_ylabel('Mean Value (95% CI)')
+    return fig
 
 def plate_Tukey_HSD(untr, feature, df):
     '''
@@ -367,7 +364,7 @@ def run_ANOVA_cytokines(df, feature, dose):
 
     return final_df,anova_power
 
-def plot_by_dose(df, feature, dose):
+def plot_by_cytokine(df, feature, dose):
     '''
     This function produces box-plots of the feature of interest group by 
     different cytokines at the dosage level of interest
@@ -399,6 +396,8 @@ def plot_by_dose(df, feature, dose):
     # Add a title and axis label
     ax.set_title('Cytokine Comparison: Mean Difference (' + feature + ',' + str(dose) + 'ng/ml)')
     ax.set_xlabel('Cytokines')
+    ax.set_ylabel('Mean Value (95% CI)')
+    return fig
 
 def cytokine_Tukey_HSD(df, feature, dose):
     '''
